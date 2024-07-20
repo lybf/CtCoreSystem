@@ -1,0 +1,10 @@
+{
+  "name": "ctcoresystem",
+  "displayName": "创世神核心加载系统",
+  "author": "9527",
+  "description": "Creators Core System",
+  "version": "1.0",
+  "minGameVersion": 136,
+  "main": "CtCoreSystem.CtCoreSystem",
+  "hidden": true
+}
