@@ -37,7 +37,8 @@ import static mindustry.Vars.net;
 import static mindustry.Vars.tilesize;
 
 /**
- * 能量网络
+ * 能量网络 电力网 节点立场 节点力场 节点网 电力力场
+ * 水人版
  *
  * @author abomb4 2023-01-02 00:25:10
  */

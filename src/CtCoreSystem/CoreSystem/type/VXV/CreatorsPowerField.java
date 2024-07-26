@@ -1,5 +1,5 @@
 package CtCoreSystem.CoreSystem.type.VXV;
-/*电力力场*/
+/*电力力场  */
 //神魂版
 
 import arc.graphics.Color;

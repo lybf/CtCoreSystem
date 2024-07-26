@@ -7,7 +7,7 @@ var updateTimer= new Interval();
 //uiScale
 const scl = 1;
 // 每行多少个
-const columns = 7;
+const columns = 10;
 // 每多少帧更新一次
 const updateScl = 30;
 

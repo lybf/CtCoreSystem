@@ -1,10 +1,13 @@
 package CtCoreSystem;
 
 
+import CtCoreSystem.CoreSystem.DsShaders;
 import CtCoreSystem.CoreSystem.WorldDifficulty;
+import CtCoreSystem.CoreSystem.WorldDifficultyCT2;
 import CtCoreSystem.CoreSystem.type.CTResearchDialog;
 import CtCoreSystem.CoreSystem.type.VXV.SpawnDraw;
 import CtCoreSystem.content.ItemX;
+import CtCoreSystem.content.SourceCodeModification_Sandbox;
 import CtCoreSystem.content.yuanban;
 import CtCoreSystem.ui.UnemFragment;   //动态logo
 import CtCoreSystem.ui.dialogs.CT3InfoDialog;
@@ -55,7 +58,9 @@ public class CtCoreSystem extends Mod {
         Vars.maxSchematicSize = 128;
     }
     public void loadContent() {
-  /*      new CT3ClassificationUi();//分类栏ui
+  /*
+   //分类栏ui
+   new CT3ClassificationUi();
         Scripts scripts = mods.getScripts();
         Scriptable scope = scripts.scope;
         try {
@@ -67,14 +72,32 @@ public class CtCoreSystem extends Mod {
         */
        // ItemX.load();
         yuanban.load();
+        DsShaders.load();//电力节点力场的动画效果
+        SourceCodeModification_Sandbox.load();
         CreatorsModJS.DawnMods();//JS加载器
     }
     public void init() {
         //显示怪物路径
         SpawnDraw.init();
-        overrideVersion();//显示版本号
-        WorldDifficulty.init();//初始化难度buff
 
+        if(Vars.mods.locateMod("extra-utilities") ==null){
+            overrideVersion();//显示版本号
+        }
+        if(Vars.mods.locateMod("creators")==null){//初始化难度buff
+            new WorldDifficulty().init();//没CT2时加载它
+        }else {
+            new WorldDifficultyCT2().set();//有CT2时加载它
+        }
+        //难度调整难度：
+        if(Vars.mods.locateMod("creators")!=null) {//有CT2时加载它
+            Events.on(EventType.ClientLoadEvent.class, e -> {
+                ui.settings.game.sliderPref(
+                        "游戏难度", 3, 0, 5, 1, i -> Core.bundle.format("Difficulty-" + i)
+                );
+                Core.settings.get("游戏难度", true);
+                new WorldDifficultyCT2().set();
+            });
+        }
       /*
        //动态logo
         try {
@@ -109,9 +132,9 @@ public class CtCoreSystem extends Mod {
             CT3InfoDialog.show();//开屏显示
             loadPowerShow();//电力显示方块
             CT3选择方块显示图标(); //选择方块显示图标
-            ctUpdateDialog.load();//更新检测
+          ctUpdateDialog.load();//更新检测
             // Timer.schedule(CTUpdater::checkUpdate, 4);//檢測更新 旧版
-            //new Wave();   //跳波惩罚
+            //new Wave();   //跳波惩罚 这个被用在主篇去加载了
 
 
             //首页主功能按钮
@@ -153,7 +176,7 @@ public class CtCoreSystem extends Mod {
         for (int i = 0; i < Vars.mods.list().size; i++) {
             Mods.LoadedMod mod = Vars.mods.list().get(i);
             if (mod != null) {
-                mod.meta.description = Core.bundle.get("mod.ct.version") + mod.meta.version + "\n\n" + mod.meta.description;
+                mod.meta.description = Core.bundle.get("mod.CT.version") + mod.meta.version + "\n\n" + mod.meta.description;
             }
         }
     }

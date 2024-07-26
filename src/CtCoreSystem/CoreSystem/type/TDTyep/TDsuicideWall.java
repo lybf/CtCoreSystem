@@ -84,11 +84,11 @@ public class TDsuicideWall extends Wall {
     }*/
 
     /**
-     * 不可拆
-     *
-     * @Override public boolean canBreak(Tile tile) {
-     * return false;
-     * }
+     *不可拆
+
+    @Override public boolean canBreak(Tile tile) {
+    return false;
+    }
      */
 
     //生存模式不可拆

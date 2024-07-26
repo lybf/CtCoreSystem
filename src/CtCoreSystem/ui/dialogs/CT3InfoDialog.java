@@ -1,5 +1,6 @@
 package CtCoreSystem.ui.dialogs;
 
+import CtCoreSystem.CoreSystem.WorldDifficultyCT2;
 import arc.Core;
 import arc.graphics.Color;
 import arc.scene.ui.TextButton;
@@ -24,9 +25,14 @@ public class CT3InfoDialog {
         // String framer = Core.bundle.format("framer");
         Mods.LoadedMod mod = Vars.mods.getMod("ctcoresystem");
         String version = mod.meta.version;
+
+       // String versionCT =  Vars.mods.getMod("ctcoresystem").meta.version;
+
+       // String versionTD =  Vars.mods.getMod("ctcoresystem").meta.version;
+
         String MODname = Core.bundle.format("planet.ct3.ModName");
         String QQ群2 = "https://jq.qq.com/?_wv=1027&k=oygqLbJ5";
-        String TD网盘 = "https://pan.baidu.com/s/1WJ2ZrehLvl8m17bl6-RbGQ?pwd=bjt3";
+        String 网盘 = "https://pan.quark.cn/s/adbe4b24ae26";
         String TDGit = "https://github.com/no9527dada/CreatorTD/releases";
         String FPGit = "https://github.com/no9527dada/CT3FantasyProject/releases";
 
@@ -43,7 +49,11 @@ public class CT3InfoDialog {
                             "游戏难度", 3, 0, 5, 1, i -> Core.bundle.format("Difficulty-" + i)
                     );
                     Core.settings.get("游戏难度", true);
+                    if((Vars.mods.locateMod("creators")==null) ){
                     new WorldDifficulty().init();
+                    }else {
+                        new WorldDifficultyCT2().set();
+                    }
                 }).show();
             })).size(150, 64);
             cont.pane((table -> {
@@ -52,24 +62,43 @@ public class CT3InfoDialog {
 
                 table.image().color(Color.valueOf("69dcee")).fillX().height(3).pad(3);
                 table.row();
+                if(Vars.mods.locateMod("creators")==null){
+                table.image(Core.atlas.find("ctcoresystem-CT-logo", Core.atlas.find("clear"))).height(290).width(587).pad(3).row();
+                }else {
+                    table.image(Core.atlas.find("ctcoresystem-CT2-logo", Core.atlas.find("clear"))).height(290).width(587).pad(3).row();
+                }
 
-                table.image(Core.atlas.find("ctcoresystem-CT-logo", Core.atlas.find("clear"))).height(290).width(587).pad(3);
+                table.add("更新内容:").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
                 table.row();
 
-//                   table.add(TZ).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
-//                   table.row();
-
-                table.add(version + "[]" + " _更新内容:").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                table.add(Core.bundle.format("ct3-System")+version+":").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
                 table.row();
-
-                table.add(Core.bundle.format("ct3-System")).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                table.add(Core.bundle.format("ct3-SystemTXT")+"\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
                 table.row();
-                table.add(Core.bundle.format("ct3-ct")).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
-                table.row();
-                table.add(Core.bundle.format("ct3-fp")).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
-                table.row();
-                table.add(Core.bundle.format("ct3-td")).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
-                table.row();
+                if(Vars.mods.locateMod("ct")!=null) {
+                    table.add(Core.bundle.format("ct3-ct")+ Vars.mods.getMod("ct").meta.version+":").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                    table.add(Core.bundle.format("ct3-ctTXT")+"\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                }
+                if(Vars.mods.locateMod("ct_fantasy_project")!=null) {
+                    table.add(Core.bundle.format("ct3-fp") + Vars.mods.getMod("ct_fantasy_project").meta.version+":").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                    table.add(Core.bundle.format("ct3-fpTXT")+"\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                }
+                if(Vars.mods.locateMod("cttd")!=null) {
+                    table.add(Core.bundle.format("ct3-td")+  Vars.mods.getMod("cttd").meta.version+":").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                    table.add(Core.bundle.format("ct3-tdTXT")+"\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                }
+                if(Vars.mods.locateMod("creators")!=null) {
+                    table.add(Core.bundle.format("ct3-creators")+  Vars.mods.getMod("creators").meta.version+":").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                    table.add(Core.bundle.format("ct3-creatorsTXT")+"\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+                    table.row();
+                }
 
                 table.add(Core.bundle.format("ct3-notice")).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
                 table.row();
@@ -117,6 +146,12 @@ public class CT3InfoDialog {
                                             Core.app.setClipboardText(FPGit);
                                         }
                                     })).size(250, 50).row();
+                                    a.button("夸克网盘", (() -> {
+                                        if (!Core.app.openURI(网盘)) {
+                                            Vars.ui.showErrorMessage("@linkfail");
+                                            Core.app.setClipboardText(网盘);
+                                        }
+                                    })).size(250, 50).row();
                                     a.button(Core.bundle.format("QQ群2"), (() -> {
                                         if (!Core.app.openURI(QQ群2)) {
                                             Vars.ui.showErrorMessage("@linkfail");
@@ -138,6 +173,12 @@ public class CT3InfoDialog {
                                         if (!Core.app.openURI(TDGit)) {
                                             Vars.ui.showErrorMessage("@linkfail");
                                             Core.app.setClipboardText(TDGit);
+                                        }
+                                    })).size(250, 50).row();
+                                    c.button("夸克网盘", (() -> {
+                                        if (!Core.app.openURI(网盘)) {
+                                            Vars.ui.showErrorMessage("@linkfail");
+                                            Core.app.setClipboardText(网盘);
                                         }
                                     })).size(250, 50).row();
                                     c.button(Core.bundle.format("QQ群2"), (() -> {

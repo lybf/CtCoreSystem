@@ -31,7 +31,7 @@ public class ctUpdateDialog {
     private static BaseDialog updateDialog;
     private static BaseDialog contentDialog;
     static String QQ群 = "https://jq.qq.com/?_wv=1027&k=oygqLbJ5";
-
+    static String 网盘 = "https://pan.quark.cn/s/adbe4b24ae26";
     public static String toText(String str) {
         return Core.bundle.format(str);
     }
@@ -39,17 +39,21 @@ public class ctUpdateDialog {
     //mod的name
     private static final String[] modNames = {
             "ctcoresystem"
+            ,"ct"
             , "cttd"
             , "ct_fantasy_project"
+            ,"creators"
     };
 
     //设置github地址
     private static final ObjectMap<String, String> modUrlName = ObjectMap.of(
-            modNames[0], "no9527dada/creators3",//主篇
-            modNames[1], "no9527dada/CreatorTD"//塔防
-            , modNames[2], "no9527dada/CT3FantasyProject"//幻想工程
-            // ,modNames[3], "no9527dada/???"
-            // ,modNames[4], "no9527dada/creators"//创2
+
+
+            modNames[0],"no9527dada/CtCoreSystem"//系统
+            ,modNames[1],   "no9527dada/creators3"//主篇
+            , modNames[2],  "no9527dada/CreatorTD"//塔防
+            ,modNames[3],"no9527dada/CT3FantasyProject"//幻想工程
+             ,modNames[4], "no9527dada/CT-origin"//创2
     );
 
     //检查更新的级别
@@ -312,6 +316,12 @@ public class ctUpdateDialog {
             table.button(Core.bundle.get("现在更新"), (() -> {
                 githubImportMod(url, isJava);
             })).size(510, 64).row();
+            table.button("夸克网盘", (() -> {
+                if (!Core.app.openURI(网盘)) {
+                    Vars.ui.showErrorMessage("@linkfail");
+                    Core.app.setClipboardText(网盘);
+                }
+            })).size(250, 50).row();
             table.button(Core.bundle.format("QQ群2"), (() -> {
                 if (!Core.app.openURI(QQ群)) {
                     Vars.ui.showErrorMessage("@linkfail");
@@ -506,7 +516,7 @@ public class ctUpdateDialog {
                 var url = asset.getString("browser_download_url");
 
                 if (Objects.equals(settings.getString("locale"), "zh_CN") || Objects.equals(settings.getString("locale"), "zh_TW")) {
-                    url = VpnHttps2 + url;
+                    url = VpnHttps + url;
                 }
 
                 Http.get(url, result -> handleMod(repo, result), ctUpdateDialog::importFail);

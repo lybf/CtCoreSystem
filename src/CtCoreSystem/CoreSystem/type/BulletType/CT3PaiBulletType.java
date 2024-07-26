@@ -36,7 +36,8 @@ public class CT3PaiBulletType extends BasicBulletType {
     @Override
     public float continuousDamage(){
         if(!continuous) return -1f;
-        return damage / damageInterval * 60f;
+        return damage;
+       // return damage / damageInterval * 60f;
     }
 
     @Override

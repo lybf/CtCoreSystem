@@ -19,11 +19,11 @@ Events.on(EventType.ClientLoadEvent, e => {
 		collapser.setTable(set);
 	}
 	
-	collapser.setCollapsed(boolp(() => !(hudfrag.shown && settings.getBool("coreitems", false))));
-	if(Vars.mobile) collapser.touchable = Touchable.disabled; // 核心资源显示会需要点击吗（
+	// collapser.setCollapsed(boolp(() => !(hudfrag.shown && settings.getBool("coreitems", true))));
+	// if(Vars.mobile) collapser.touchable = Touchable.disabled; // 核心资源显示会需要点击吗（
 	
 	if(Vars.mobile) ui.settings.graphics.checkPref("coreitems", true);
-	ui.settings.graphics.checkPref("mycoreitems9527", true, s => change());
+	ui.settings.graphics.checkPref("mycoreitems9527", false, s => change());
 	
 	change();
 });
