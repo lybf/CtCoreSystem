@@ -54,7 +54,7 @@ public class SourceCodeModification_Sandbox {
         //沙盒全能物品源
         new XVXSource("Automatic-adaptation-source") {
             {
-                this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with(new Object[0]));
+                this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with());
                 this.alwaysUnlocked = true;
                 this.localizedName = "沙盒源";
                 envEnabled = Env.any;

@@ -70,7 +70,7 @@ public class CtCoreSystem extends Mod {
             ui.showException(var5);
         }
         */
-       // ItemX.load();
+        ItemX.load();
         yuanban.load();
         DsShaders.load();//电力节点力场的动画效果
         SourceCodeModification_Sandbox.load();

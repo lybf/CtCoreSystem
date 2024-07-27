@@ -17,13 +17,50 @@ importPackage(CreatorsJavaPack.ui.dialogs)
 importPackage(CreatorsJavaPack.ui.dialogs)
 
 CreatorsModJS.RunName.add("ctcoresystem")
-CreatorsModJS.DawnRun.add(run(() => {}));
- if((Vars.mods.locateMod("creators")==null) ){
-require('gong_neng');
+CreatorsModJS.DawnRun.add(run(() => { }));
+if ((Vars.mods.locateMod("creators") == null)) {
+	require('gong_neng');
 } else {
-require('biansu2');
+	require('biansu2');
 }
-require('CoreItems');
+
+ try {
+	//java.lang.Class.forName("mindustry.arcModule.ARCVars");
+	java.lang. Class.forName("mindustryX.VarsX");
+} catch (e if java.lang.ClassNotFoundException) {
+
+	try {
+		java.lang.Class.forName("mindustry.arcModule.ARCVars");
+		//java.lang. Class.forName("mindustryX.VarsX");
+	} catch (e if java.lang.ClassNotFoundException) {
+
+	
+	const myCoreItems = require("ui/myCoreItems");
+	Events.on(EventType.ClientLoadEvent, e => {
+		let ui = Vars.ui;
+		let hudGroup = ui.hudGroup;
+		let hudfrag = ui.hudfrag;
+		let settings = Core.settings;
+		myCoreItems.load();
+		let myItems = myCoreItems.rebuild();
+		let collapser = hudGroup.find("coreinfo").getChildren().get(1).getChildren().get(0);
+		let oldItems = collapser.getChildren().get(0);
+		
+		let change = () => {
+			let s = settings.getBool("mycoreitems9527", true);
+			let set = s ? myItems : oldItems;
+			collapser.setTable(set);
+			
+		}
+		change();
+	});
+	Events.on(ResetEvent, e => {
+		myCoreItems.resetUsed();
+	});
+} }
+
+/*********************** */
+
 require('nihility');//虚无护盾
 let mod = Vars.mods.getMod("蓝图效率");
 if (mod == null) {
