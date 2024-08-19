@@ -62,7 +62,7 @@ public class GenericCrafterLimit {
 
         public 工厂前置限制(String name) {
             super(name);
-            前置方块 = Blocks.router;
+            //前置方块 = Blocks.router;
             数量 = 1;
         }
 
@@ -74,6 +74,7 @@ public class GenericCrafterLimit {
         public boolean canPlaceOn(Tile tile, Team team, int rotation) {
             //size后面数字代表场上目标建筑的数量，低于数字的值则不允许建造
             if (Vars.state.teams.get(team).getBuildings(前置方块).size < 数量) return false;
+            if (前置方块 == null) return false;
             return super.canPlaceOn(tile, team, rotation);
         }
 

@@ -74,7 +74,7 @@ public class PowerNetTower extends PowerBlock {
 
                     @Override
                     public void load(Block block) {
-                        topRegion = CTlib.loadRegion(name + "-top");
+                        topRegion = CTClib.loadRegion(name + "-top");
                     }
 
                     @Override
@@ -123,7 +123,7 @@ public class PowerNetTower extends PowerBlock {
         addBar("totalpower", PowerNode.makePowerBalance());
         addBar("batteries", PowerNode.makeBatteryBalance());
         addBar("power", entity -> new Bar(
-                () -> CTlib.getMessage("bar", "battery-power",
+                () -> CTClib.getMessage("bar", "battery-power",
                         UI.formatAmount((int) (entity.power.status * consPower.capacity))),
                 () -> Pal.powerBar,
                 () -> entity.power.status

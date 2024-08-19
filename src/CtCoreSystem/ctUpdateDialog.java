@@ -11,19 +11,15 @@ import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.Streams;
 import arc.util.serialization.Jval;
-import CtCoreSystem.ui.dialogs.CT3InfoDialog;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.mod.Mods;
 import mindustry.ui.dialogs.BaseDialog;
 
-
 import java.util.Objects;
 
 import static arc.Core.settings;
-import static CtCoreSystem.ui.dialogs.CT3InfoDialog.ct3info;
 import static mindustry.Vars.*;
-import static mindustry.Vars.ghApi;
 
 public class ctUpdateDialog {
 
@@ -265,7 +261,7 @@ public class ctUpdateDialog {
                         }
                     });
 
-                    TextButton download = new TextButton("Renew Version");
+                    TextButton  download = new TextButton("Renew Version");
                     download.update(() -> {
                         if (InUpdate()) {
                             download.setText(Core.bundle.get("检查更新中"));
@@ -315,19 +311,19 @@ public class ctUpdateDialog {
             table.image().color(Color.valueOf("69dcee")).fillX().height(3).pad(3).row();
             table.button(Core.bundle.get("现在更新"), (() -> {
                 githubImportMod(url, isJava);
-            })).size(510, 64).row();
+            })).size(300, 64).row();
             table.button("夸克网盘", (() -> {
                 if (!Core.app.openURI(网盘)) {
                     Vars.ui.showErrorMessage("@linkfail");
                     Core.app.setClipboardText(网盘);
                 }
-            })).size(250, 50).row();
+            })).size(300, 50).row();
             table.button(Core.bundle.format("QQ群2"), (() -> {
                 if (!Core.app.openURI(QQ群)) {
                     Vars.ui.showErrorMessage("@linkfail");
                     Core.app.setClipboardText(QQ群);
                 }
-            })).size(510, 64).row();
+            })).size(300, 64).row();
             table.button("@close", (contentDialog::hide)).size(100, 64).labelAlign(Align.center);//关闭按钮
         }));
 
@@ -503,7 +499,8 @@ public class ctUpdateDialog {
 
     //代理下载
     private static final String VpnHttps = "http://ghproxy.org/";
-    private static final String VpnHttps2 = "https://bgithub.xyz/";
+    private static final String VpnHttps2 = "http://gh.tinylake.tech/";//用這個會報錯zip END header not found
+    private static final String VpnHttps3 = "";
     private static void githubImportJavaMod(String repo) {
         Http.get(ghApi + "/repos/" + repo + "/releases/latest", res -> {
             var json = Jval.read(res.getResultAsString());
@@ -516,7 +513,7 @@ public class ctUpdateDialog {
                 var url = asset.getString("browser_download_url");
 
                 if (Objects.equals(settings.getString("locale"), "zh_CN") || Objects.equals(settings.getString("locale"), "zh_TW")) {
-                    url = VpnHttps + url;
+                    url = VpnHttps3 + url;
                 }
 
                 Http.get(url, result -> handleMod(repo, result), ctUpdateDialog::importFail);

@@ -9,7 +9,7 @@ import CtCoreSystem.CoreSystem.type.VXV.SpawnDraw;
 import CtCoreSystem.content.ItemX;
 import CtCoreSystem.content.SourceCodeModification_Sandbox;
 import CtCoreSystem.content.yuanban;
-import CtCoreSystem.ui.UnemFragment;   //动态logo
+import CtCoreSystem.ui.CTGalaxyAcknowledgments;
 import CtCoreSystem.ui.dialogs.CT3InfoDialog;
 import CtCoreSystem.ui.dialogs.CT3PlanetDialog;
 import CtCoreSystem.ui.dialogs.CT3function;
@@ -27,7 +27,6 @@ import mindustry.gen.Tex;
 import mindustry.graphics.Layer;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods;
-import mindustry.mod.Scripts;
 import mindustry.type.Planet;
 import mindustry.type.UnitType;
 import mindustry.ui.Styles;
@@ -37,16 +36,12 @@ import mindustry.world.Block;
 import mindustry.world.blocks.distribution.Sorter;
 import mindustry.world.blocks.sandbox.ItemSource;
 import mindustry.world.blocks.sandbox.LiquidSource;
-import rhino.Context;
-import rhino.Scriptable;
-import rhino.ScriptableObject;
 
 import java.util.Objects;
 
 import static CtCoreSystem.CoreSystem.type.VXV.powerShowBlock.loadPowerShow;
 import static arc.Core.camera;
 import static mindustry.Vars.*;
-import static mindustry.Vars.tilesize;
 
 public class CtCoreSystem extends Mod {
     {
@@ -129,6 +124,7 @@ public class CtCoreSystem extends Mod {
 
 
         Events.on(EventType.ClientLoadEvent.class, e -> {
+            CTGalaxyAcknowledgments.标题页菜单();//添加标题页菜单
             CT3InfoDialog.show();//开屏显示
             loadPowerShow();//电力显示方块
             CT3选择方块显示图标(); //选择方块显示图标

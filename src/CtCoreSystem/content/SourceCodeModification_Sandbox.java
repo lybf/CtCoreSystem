@@ -38,7 +38,6 @@ import static mindustry.type.ItemStack.with;
 public class SourceCodeModification_Sandbox {
     public static void load() {
 
-
  /*      Blocks.powerSource.envDisabled = Evn2.标志1 | Env.terrestrial;
         Blocks. powerVoid.envDisabled = Evn2.标志1 | Env.terrestrial;
         Blocks. itemSource.envDisabled = Evn2.标志1 | Env.terrestrial;

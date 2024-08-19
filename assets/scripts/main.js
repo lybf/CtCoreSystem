@@ -24,40 +24,16 @@ if ((Vars.mods.locateMod("creators") == null)) {
 	require('biansu2');
 }
 
- try {
-	//java.lang.Class.forName("mindustry.arcModule.ARCVars");
-	java.lang. Class.forName("mindustryX.VarsX");
-} catch (e if java.lang.ClassNotFoundException) {
 
-	try {
-		java.lang.Class.forName("mindustry.arcModule.ARCVars");
-		//java.lang. Class.forName("mindustryX.VarsX");
-	} catch (e if java.lang.ClassNotFoundException) {
+// if(Version.__javaObject__.getFields() == 6){
+// 	require("CoreItems")
+// }
 
-	
-	const myCoreItems = require("ui/myCoreItems");
-	Events.on(EventType.ClientLoadEvent, e => {
-		let ui = Vars.ui;
-		let hudGroup = ui.hudGroup;
-		let hudfrag = ui.hudfrag;
-		let settings = Core.settings;
-		myCoreItems.load();
-		let myItems = myCoreItems.rebuild();
-		let collapser = hudGroup.find("coreinfo").getChildren().get(1).getChildren().get(0);
-		let oldItems = collapser.getChildren().get(0);
-		
-		let change = () => {
-			let s = settings.getBool("mycoreitems9527", true);
-			let set = s ? myItems : oldItems;
-			collapser.setTable(set);
-			
-		}
-		change();
-	});
-	Events.on(ResetEvent, e => {
-		myCoreItems.resetUsed();
-	});
-} }
+if(Version.__javaObject__.fields.length == 6){
+	require("CoreItems")
+}
+
+
 
 /*********************** */
 
@@ -70,4 +46,26 @@ if (mod == null) {
 	Vars.mods.importMod(fi);
 	Vars.mods.locateMod("蓝图效率");
 };
+let mod2 = Vars.mods.getMod("auto-saver");
+if (mod2 == null) {
+	let bd = Vars.mods.locateMod("ctcoresystem");
+	let fi = bd.root.child("mod")
+		.child("自动数据保存-v1.1-pre.jar");
+	Vars.mods.importMod(fi);
+	Vars.mods.locateMod("auto-saver");
+};
 
+/*
+//检测学术端和X端
+try {
+	//java.lang.Class.forName("mindustry.arcModule.ARCVars");
+	java.lang.Class.forName("mindustryX.VarsX");
+} catch (e if java.lang.ClassNotFoundException) {
+
+	try {
+		java.lang.Class.forName("mindustry.arcModule.ARCVars");
+		//java.lang. Class.forName("mindustryX.VarsX");
+	} catch (e if java.lang.ClassNotFoundException) {
+
+	}
+} */

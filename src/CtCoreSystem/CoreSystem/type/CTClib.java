@@ -2,11 +2,7 @@ package CtCoreSystem.CoreSystem.type;
 
 import arc.Core;
 import arc.audio.Sound;
-import arc.graphics.Color;
-import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Interp;
-import arc.math.Rand;
 import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
 import arc.struct.IntSet;
@@ -17,14 +13,12 @@ import mindustry.entities.Effect;
 import mindustry.game.Team;
 import mindustry.gen.Bullet;
 import mindustry.gen.Sounds;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
 
 
-public class CTlib {
+public class CTClib {
 
     /**
      * name

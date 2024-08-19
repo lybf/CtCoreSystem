@@ -43,19 +43,6 @@ public class CT3InfoDialog {
             addCloseListener();//按esc关闭
             buttons.defaults().size(210, 64);
             buttons.button("@close", (this::hide)).size(100, 64);//关闭按钮
-            buttons.button(Core.bundle.get("difficulty.game", "难度设置"), (() -> {//游戏难度设置
-                new SettingDifficultyDialog().onDifficutyChange(e -> {
-                    ui.settings.game.sliderPref(
-                            "游戏难度", 3, 0, 5, 1, i -> Core.bundle.format("Difficulty-" + i)
-                    );
-                    Core.settings.get("游戏难度", true);
-                    if((Vars.mods.locateMod("creators")==null) ){
-                    new WorldDifficulty().init();
-                    }else {
-                        new WorldDifficultyCT2().set();
-                    }
-                }).show();
-            })).size(150, 64);
             cont.pane((table -> {
                 table.add(MODname).left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
                 table.row();
