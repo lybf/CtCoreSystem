@@ -1,15 +1,37 @@
 package CtCoreSystem.CoreSystem.type;
 
+import arc.Core;
+import arc.graphics.Color;
+import arc.util.Time;
+import mindustry.Vars;
+import mindustry.core.UI;
+import mindustry.ctype.UnlockableContent;
 import mindustry.game.Team;
+import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
 
+import static arc.util.Tmp.c1;
 import static mindustry.Vars.state;
 
 //改核心的覆盖方式
 public class CTCoreBlock extends CoreBlock {
     public CTCoreBlock(String name) {
         super(name);
+    }
+    public void setBars() {
+        super.setBars();
+        this.addBar("capacity", (e) -> {
+            return new Bar(() -> {
+                return  Math.floor(e.health) + " / " + e.maxHealth;
+            }, () -> {
+                return (c1.set(Color.red).shiftHue((float) ((Time.time * 0.2) + (1 * (360 / 16)))));//变色;
+            }, () -> {
+                return (float)e.healthf();
+            });
+        });
+        this.removeBar("health");
     }
 
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {

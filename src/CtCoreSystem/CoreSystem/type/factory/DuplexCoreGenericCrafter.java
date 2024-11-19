@@ -152,6 +152,7 @@ public class DuplexCoreGenericCrafter extends CoreGenericCrafter {
         @Override
         public void updateConsumption() {
             Building build = teamCore();
+            if (build == null ) return;
             if (!block.hasConsumers || cheating()) {
                 potentialEfficiency = enabled && productionValid() ? 1.0F : 0.0F;
                 efficiency = optionalEfficiency = shouldConsume() ? potentialEfficiency : 0.0F;
@@ -203,7 +204,8 @@ public class DuplexCoreGenericCrafter extends CoreGenericCrafter {
         @Override
         public boolean shouldConsume() {
             Building build = teamCore();
-            if (outputItems != null) {
+              if (build != null )
+            if ( outputItems != null) {
                 for (var output : outputItems) {
                     if (build.items.get(output.item) + output.amount > build.getMaximumAccepted(output.item)) {
                         return false;

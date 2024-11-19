@@ -5,11 +5,13 @@ import arc.graphics.g2d.Lines;
 import arc.util.Time;
 import mindustry.graphics.Layer;
 import mindustry.world.blocks.defense.OverdriveProjector;
+
+//超速仪的范围圈动画
 public class CTOverdriveProjector extends OverdriveProjector {
     public float 间隔 = 180f;
     public CTOverdriveProjector(String name) {
         super(name);
-        chuxi=4f;
+        chuxi=4f;//粗细
     }
     public float chuxi;
     public class CTOverdriveProjectorBuild extends OverdriveBuild{

@@ -14,14 +14,15 @@ public class WorldDifficultyCT2 {
     public static void set() {
         if(作弊系统 == null){
             作弊系统 = new StatusEffect("difficulty"){{
+                show = true;
                 localizedName = "难度模式";
-                fullIcon = Core.atlas.find("creators-difficulty");
-                uiIcon = Core.atlas.find("creators-difficulty");
+                fullIcon = Core.atlas.find("ctcoresystem-difficulty");
+                uiIcon = Core.atlas.find("ctcoresystem-difficulty");
             }
                 @Override
                 public void loadIcon(){
-                    fullIcon = Core.atlas.find("creators-difficulty");
-                    uiIcon = Core.atlas.find("creators-difficulty");
+                    fullIcon = Core.atlas.find("ctcoresystem-difficulty");
+                    uiIcon = Core.atlas.find("ctcoresystem-difficulty");
                 }
             };
         }
@@ -98,60 +99,60 @@ public class WorldDifficultyCT2 {
 
     public static float 时间倍率(int 值){
         switch (值){
-            case 0 : return 1f;
-            case 1 : return 2;
-            case 2 : return 1.5f;
-            case 3 : return 1;
-            case 4 : return 0.8f;
-            case 5 : return 1.5f;
+            case 1 : return 1f;
+            case 2 : return 2;
+            case 3 : return 1.5f;
+            case 4 : return 1;
+            case 5 : return 0.8f;
+            case 6 : return 1.5f;
         }
         return 1f;
     }
 
     public static float 单位血量倍率(int 值){
         switch (值){
-            case 0 : return 0.01f;
-            case 1 : return 0.3f;
-            case 2 : return 0.7f;
-            case 3 : return 1;
-            case 4 : return 1.8f;
-            case 5 : return 3.3f;
+            case 1  : return 0.01f;
+            case 2  : return 0.3f;
+            case 3  : return 0.7f;
+            case 4  : return 1;
+            case 5  : return 1.8f;
+            case 6  : return 3.3f;
         }
         return 1f;
     }
 
     public static float 单位攻击倍率(int 值){
         switch (值){
-            case 0 : return 0.0001f;
-            case 1 : return 0.5f;
-            case 2 : return 0.75f;
-            case 3 : return 1;
-            case 4 : return 1.15f;
-            case 5 : return 1.5f;
+            case 1 : return 0.0001f;
+            case 2 : return 0.5f;
+            case 3 : return 0.75f;
+            case 4 : return 1;
+            case 5 : return 1.15f;
+            case 6 : return 1.5f;
         }
         return 1f;
     }
 
     public static float 单位射速倍率(int 值){
         switch (值){
-            case 0 : return 0f;
-            case 1 : return 0.6f;
-            case 2 : return 0.8f;
-            case 3 : return 1;
-            case 4 : return 1.5f;
-            case 5 : return 2.2f;
+            case 1  : return 0f;
+            case 2  : return 0.6f;
+            case 3  : return 0.8f;
+            case 4  : return 1;
+            case 5  : return 1.5f;
+            case 6  : return 2.2f;
         }
         return 1f;
     }
 
     public static float 单位移动倍率(int 值){
         switch (值){
-            case 0 : return 1f;
-            case 1 : return 0.8f;
-            case 2 : return 0.9f;
-            case 3 : return 1f;
-            case 4 : return 1f;
-            case 5 : return 0.8f;
+            case 1  : return 1f;
+            case 2  : return 0.8f;
+            case 3  : return 0.9f;
+            case 4  : return 1f;
+            case 5  : return 1f;
+            case 6  : return 0.8f;
         }
         return 1f;
     }

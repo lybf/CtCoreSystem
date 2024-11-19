@@ -4,26 +4,26 @@ import CtCoreSystem.CoreSystem.WorldDifficulty;
 import CtCoreSystem.CoreSystem.WorldDifficultyCT2;
 import CtCoreSystem.ui.dialogs.SettingDifficultyDialog;
 import arc.Core;
+import arc.util.Log;
 import mindustry.Vars;
+import mindustry.ui.dialogs.SettingsMenuDialog;
 
+import static arc.Core.bundle;
 import static mindustry.Vars.ui;
 
 //添加标题页菜单
 public class CTGalaxyAcknowledgments {
     public static void 标题页菜单() {
-        Vars.ui.menufrag.addButton(Core.bundle.get("difficulty.game"), () -> {
-            Core.app.post(() -> {
-                new SettingDifficultyDialog().onDifficutyChange(e -> {
-                    ui.settings.game.sliderPref("游戏难度", 3, 0, 5, 1, i -> Core.bundle.format("Difficulty-" + i));
-                    Core.settings.get("游戏难度", true);
-                    if ((Vars.mods.locateMod("creators") == null)) {
-                        new WorldDifficulty().init();
-                    } else {
-                        new WorldDifficultyCT2().set();
-                    }
-                }).show();
-            });
-        });
+
+        if (加载CT2()) {
+            new WorldDifficultyCT2().set();
+        } else {
+            new WorldDifficulty().init();
+        }
+
+        ui.settings.game.sliderPref("游戏难度", 3, 1, 加载CT2() ? 6 : 4, 1, i -> Core.bundle.get((加载CT2() ? "" : "CT3") + "Difficulty-" + i));
+
+        Vars.ui.menufrag.addButton(Core.bundle.get("difficulty.game"), () -> new SettingDifficultyDialog(加载CT2()).show());
     }
 
 
@@ -42,5 +42,9 @@ public class CTGalaxyAcknowledgments {
         }).width(Core.scene.getWidth())*/
         ;
         // Acknowledgments.buttons.button(Core.bundle.get("galaxymod.report.button.close"),Acknowledgments::hide).size(128,64);
+    }
+
+    public static boolean 加载CT2(){
+        return Vars.mods.locateMod("creators") != null;
     }
 }

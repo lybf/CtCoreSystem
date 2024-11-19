@@ -9,34 +9,40 @@ import mindustry.world.blocks.environment.Floor;
 
 import static mindustry.graphics.Shaders.getShaderFi;
 
-
 public class CTFragShader {
-    public static Fi shaders = Vars.mods.locateMod("ctcoresystem").root.child("CTshaders");
-    public static CacheLayer.ShaderLayer m =//幻液的效果
-            new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(getShaderFi("screenspace.vert").readString(),
-                    shaders.child("cryofluid2.frag").readString()));
-    public static CacheLayer.ShaderLayer 紫色冷却液效果 =//TD
-            new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(getShaderFi("screenspace.vert").readString(),
-                    shaders.child("Floor1.frag").readString()));
+    public static Fi shaders;
+    public static CacheLayer.ShaderLayer m;
+    public static CacheLayer.ShaderLayer 紫色冷却液效果;
+    public static CacheLayer.ShaderLayer 灰色冷却液大效果;
+    public static CacheLayer.ShaderLayer 绿色冷却液大效果;
+    public static CacheLayer.ShaderLayer 黄色冷却液大效果;
+    public static CacheLayer.ShaderLayer 粉色冷却液效果;
+    public static CacheLayer.ShaderLayer 蓝色冷却液效果;
+    public static CacheLayer.ShaderLayer 玫瑰金小点效果;
+    public static CacheLayer.ShaderLayer weizhi;
 
-    public static CacheLayer.ShaderLayer weizhi =//??
-            new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(getShaderFi("screenspace.vert").readString(),
-                    shaders.child("cryofluid1.frag").readString()));
-
-    static {
-        CacheLayer.add(m, 紫色冷却液效果, weizhi);
+    public CTFragShader() {
     }
 
     public static void load() {
-/*        new Floor("DT-LiquidFloor") {{
-            drownTime = 10f;
-            variants = 0;
-            isLiquid = false;
-            emitLight = true;
-            lightRadius = 25f;
-            // lightColor = C("cc44ff").cpy().a(0.7f);
-            //cacheLayer = new CacheLayer.ShaderLayer(紫色Floor);
-            cacheLayer = weizhi;
-        }};*/
+    }
+
+    static {
+        shaders = Vars.mods.locateMod("ctcoresystem").root.child("CTshaders");
+        紫色冷却液效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor1.frag").readString()));
+        灰色冷却液大效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor2.frag").readString()));
+        玫瑰金小点效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor3.frag").readString()));
+        粉色冷却液效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor4.frag").readString()));
+        绿色冷却液大效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor5.frag").readString()));
+        黄色冷却液大效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor6.frag").readString()));
+        蓝色冷却液效果 = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("Floor7.frag").readString()));
+
+        weizhi = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("cryofluid1.frag").readString()));
+        m = new CacheLayer.ShaderLayer(new Shaders.SurfaceShader(Shaders.getShaderFi("screenspace.vert").readString(), shaders.child("cryofluid2.frag").readString()));
+
+        CacheLayer.add(new CacheLayer[]{
+                m, 紫色冷却液效果, weizhi,灰色冷却液大效果,玫瑰金小点效果,
+                绿色冷却液大效果,黄色冷却液大效果,粉色冷却液效果,蓝色冷却液效果
+        });
     }
 }

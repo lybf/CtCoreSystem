@@ -15,21 +15,21 @@ public class WorldDifficulty {
     public static StatusEffect cheat;
 
     public static void init() {
-        if (cheat == null) {
+        //if (cheat == null) {
             cheat = new StatusEffect("difficulty") {
-                {
+                {show = true;
                     localizedName = "难度模式";
-                    fullIcon = Core.atlas.find("ct-difficulty");
-                    uiIcon = Core.atlas.find("ct-difficulty");
+                    fullIcon = Core.atlas.find("ctcoresystem-difficulty");
+                    uiIcon = Core.atlas.find("ctcoresystem-difficulty");
                 }
 
                 @Override
                 public void loadIcon() {
-                    fullIcon = Core.atlas.find("ct-difficulty");
-                    uiIcon = Core.atlas.find("ct-difficulty");
+                    fullIcon = Core.atlas.find("ctcoresystem-difficulty");
+                    uiIcon = Core.atlas.find("ctcoresystem-difficulty");
                 }
             };
-        }
+       // }
 
         Events.run(EventType.Trigger.update, () -> {
             if (!Vars.ui.editor.isShown() && !Vars.state.rules.editor && !Vars.state.isMenu()) {
@@ -155,7 +155,7 @@ public class WorldDifficulty {
             case 3:
                 return 1;
             case 4:
-                return 2.5f;
+                return 1.8f;
             // case 5 : return 2.2f;
         }
         return 1f;

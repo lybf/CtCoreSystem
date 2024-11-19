@@ -32,7 +32,7 @@ public class waveRule extends Block {
 
     @Override
     public boolean canBreak(Tile tile) {
-        return !privileged || state.rules.editor || state.playtestingMap != null;
+        return Vars.state.rules.infiniteResources||!privileged || state.rules.editor || state.playtestingMap != null;
     }
 
     public class waveRuleBuild extends Building {

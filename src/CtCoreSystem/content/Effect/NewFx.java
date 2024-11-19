@@ -402,7 +402,7 @@ public class NewFx {
                     new ParticleEffect() {{//实心圆，从小到大
                         particles = 1;
                         sizeFrom = 1;
-                        sizeTo = 27;
+                        sizeTo = 18;
                         length = 0;
                         lifetime = 200;
                         layer = 109;
@@ -413,24 +413,24 @@ public class NewFx {
                     new ParticleEffect() {{
                         particles = 1;
                         sizeFrom = 2;
-                        sizeTo = 80;
+                        sizeTo = 140;
                         length = 0;
                         spin = -10;
                         layer = 109;
                         lifetime = 200;
-                        region = "ct-菱形2";
+                        region = "ctcoresystem-菱形2";
                         colorFrom = 尘埃Bullet颜色1;
                         colorTo = 尘埃Bullet颜色2;
                     }},
                     new ParticleEffect() {{
                         particles = 1;
                         sizeFrom = 2;
-                        sizeTo = 50;
+                        sizeTo = 110;
                         length = 0;
                         spin = 10;
                         layer = 109;
                         lifetime = 200;
-                        region = "ct-菱形3";
+                        region = "ctcoresystem-菱形3";
                         colorFrom = 尘埃Bullet颜色1;
                         colorTo = 尘埃Bullet颜色2;
                     }},

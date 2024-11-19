@@ -26,10 +26,13 @@ import mindustry.world.meta.StatUnit;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
+import static mindustry.content.StatusEffects.freezing;
+import static mindustry.content.StatusEffects.wet;
 
 public class UnitPortal extends Block {
     //传送以后给单位加个免疫传送的状态，在这个状态的持续时间里，无法被计入传送
     public static StatusEffect TransferEffect;
+    public static StatusEffect fan_TransferEffect;
     //状态时间 600正常等于10秒
     public float TransferEffectTime = 600;
 
@@ -44,7 +47,8 @@ public class UnitPortal extends Block {
 
         TransferEffect = new StatusEffect("immuneTransfer") {
             {
-                show = false;
+              //  show = false;
+                init(() -> opposite(fan_TransferEffect));
             }
 
             public void update(Unit unit, float time) {
@@ -55,6 +59,12 @@ public class UnitPortal extends Block {
                 Draw.z(Layer.flyingUnit + 1);
                 Draw.rect("immuneTransfer", unit.x, unit.y, tilesize + unit.hitSize() / 2, tilesize + unit.hitSize() / 2);
             }*/
+        };
+        fan_TransferEffect = new StatusEffect("fan_TransferEffect"){
+            {
+               // show = false;
+                init(() -> opposite(TransferEffect));
+            }
         };
     }
 

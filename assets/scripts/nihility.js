@@ -94,6 +94,9 @@ lib.setBuildingSimple(blockType, ForceProjector.ForceBuild, {
 blockType.itemConsumer = blockType.consumeItem(ItemX.物品, 1).boost();
 blockType.buildVisibility=BuildVisibility.sandboxOnly;
 blockType.category=Category.effect
+blockType.targetable = false;//被单位攻击？
+ blockType.solid = false;//无碰撞 非固体
+   blockType.underBullets = true;//不被子弹击中
 blockType.requirements = ItemStack.with(
     ItemX.物品,1
 );

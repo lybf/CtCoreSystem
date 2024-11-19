@@ -29,10 +29,9 @@ if ((Vars.mods.locateMod("creators") == null)) {
 // 	require("CoreItems")
 // }
 
-if(Version.__javaObject__.fields.length == 6){
+if(Version.__javaObject__.fields.length == 6){//检测到是其他端时不加载核心资源显示
 	require("CoreItems")
 }
-
 
 
 /*********************** */

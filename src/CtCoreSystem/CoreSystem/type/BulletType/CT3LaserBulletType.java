@@ -124,7 +124,7 @@ public class CT3LaserBulletType extends ContinuousLaserBulletType {
         Draw.color(圈颜色
                 // Pal.remove
         );
-        float lfin = (Time.time % 60f) / 60f;
+        float lfin = (Time.time % 20f) / 20f;
         int amount = (int) (baseLen / (圆环间隔)) + 2;
         float len = baseLen / amount;
 

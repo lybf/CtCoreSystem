@@ -1,7 +1,7 @@
 package CtCoreSystem.content;
 
 import CtCoreSystem.CoreSystem.type.CT3UnitType;
-import CtCoreSystem.CoreSystem.type.TDTyep.TDBuffChange;
+import CtCoreSystem.CoreSystem.type.TDTyep.*;
 import CtCoreSystem.CoreSystem.type.XVXSource;
 import CtCoreSystem.CoreSystem.type.waveRule;
 import arc.Core;
@@ -45,12 +45,17 @@ public class SourceCodeModification_Sandbox {
         Blocks.  liquidSource.envDisabled = Evn2.标志1 | Env.terrestrial;
         Blocks.    liquidVoid.envDisabled = Evn2.标志1 | Env.terrestrial;*/
 
-        new waveRule("waveRule");
+      new waveRule("waveRule");
         new TDBuffChange.Buff加盾("Shield");
         new TDBuffChange.BuffHealth("Health");
         new TDBuffChange.BuffSpee("Speed");
         new TDBuffChange.BuffDmage("Damage");
+        new TDBuffChange.游戏速度("游戏速度");
+        new TDBuffChange.游戏缩放("游戏缩放");
+        new TDBuffChange.游戏环境光开关("游戏环境光开关");
+        new TDBuffChange.核心禁造圈("核心禁造半径");
         //沙盒全能物品源
+        new CoreBlock("ces"){{    requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 0));}} ;
         new XVXSource("Automatic-adaptation-source") {
             {
                 this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with());

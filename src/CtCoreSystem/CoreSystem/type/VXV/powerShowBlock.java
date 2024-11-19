@@ -22,7 +22,6 @@ public class powerShowBlock extends MessageBlock {
     public static void loadPowerShow() {
         Core.scene.find("minimap/position").parent.fill(t -> {
             Label label = new Label("");
-
             label.update(() -> {
                 label.setText(() -> {
                     StringBuilder text = new StringBuilder();
@@ -49,7 +48,6 @@ public class powerShowBlock extends MessageBlock {
                     return text;
                 });
             });
-
             t.row();
             t.add(label).touchable(Touchable.disabled).style(Styles.outlineLabel);
             t.right();
@@ -77,14 +75,12 @@ public class powerShowBlock extends MessageBlock {
             if (message.length() == 0) {
                 message.append("未定义");
             }
-
             powerShowBuild.add(this);
         }
 
         @Override
         public void remove() {
             super.remove();
-
             powerShowBuild.remove(this);
         }
     }
