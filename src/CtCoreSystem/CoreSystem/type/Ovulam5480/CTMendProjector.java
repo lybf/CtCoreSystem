@@ -8,13 +8,18 @@ import mindustry.game.Team;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.environment.Floor;
+import mindustry.world.consumers.ConsumeItems;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
+import mindustry.world.meta.StatValues;
 
 import static mindustry.Vars.indexer;
+import static mindustry.Vars.tilesize;
 
 /**
  * 非百分比的数值修复器
  */
-public class CTMendProjector extends MendProjector {
+public class CTMendProjector extends CTMendProjector2 {
     public float healAmount;//修复的数值
 
     public CTMendProjector(String name) {
@@ -51,5 +56,24 @@ public class CTMendProjector extends MendProjector {
                 });
             }
         }
+
+    }
+    //复制的原版
+    @Override
+    public void setStats(){
+        stats.timePeriod = useTime;
+        super.setStats();
+
+        stats.add(Stat.repairTime, (int)(100f / healPercent * reload / 60f), StatUnit.seconds);
+        stats.add(Stat.range, range / tilesize, StatUnit.blocks);
+
+     /*   if(findConsumer(c -> c instanceof ConsumeItems) instanceof ConsumeItems cons){
+            stats.remove(Stat.booster);
+            stats.add(Stat.booster, StatValues.itemBoosters(
+                    "{0}" + StatUnit.timesSpeed.localized(),
+                    stats.timePeriod, (phaseBoost + healPercent) / healPercent, phaseRangeBoost,
+                    cons.items, this::consumesItem)
+            );
+        }*/
     }
 }

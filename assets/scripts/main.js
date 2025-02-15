@@ -23,7 +23,7 @@ if ((Vars.mods.locateMod("creators") == null)) {
 } else {
 	require('biansu2');
 }
-
+Blocks.worldMessage.maxTextLength = 9527520;
 
 // if(Version.__javaObject__.getFields() == 6){
 // 	require("CoreItems")
@@ -37,22 +37,36 @@ if(Version.__javaObject__.fields.length == 6){//检测到是其他端时不加�
 /*********************** */
 
 require('nihility');//虚无护盾
-let mod = Vars.mods.getMod("蓝图效率");
+/*let mod = Vars.mods.getMod("蓝图效率");
 if (mod == null) {
 	let bd = Vars.mods.locateMod("ctcoresystem");
 	let fi = bd.root.child("mod")
 		.child("显示蓝图消耗产出效率[v1.2].zip");
 	Vars.mods.importMod(fi);
 	Vars.mods.locateMod("蓝图效率");
-};
-let mod2 = Vars.mods.getMod("auto-saver");
+};*/
+
+/*
+let mod2 = Vars.mods.getMod("auto_saver");
 if (mod2 == null) {
 	let bd = Vars.mods.locateMod("ctcoresystem");
 	let fi = bd.root.child("mod")
-		.child("自动数据保存-v1.1-pre.jar");
+		.child("AutoSaver.jar");
 	Vars.mods.importMod(fi);
-	Vars.mods.locateMod("auto-saver");
+	Vars.mods.locateMod("auto_saver");
 };
+*/
+
+/* let mod = Vars.mods.locateMod("auto_saver");
+ if (mod == null) {
+	 let bd = Vars.mods.locateMod("ctcoresystem");
+	 let fi = bd.root.child("mod")
+		 .child("AutoSaver.jar");
+	 Vars.mods.importMod(fi);
+ };*/
+
+
+//Vars.mods.getMod("蓝图效率").state = Mods.ModState.disabled;
 
 /*
 //检测学术端和X端

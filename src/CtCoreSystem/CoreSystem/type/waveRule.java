@@ -27,7 +27,7 @@ public class waveRule extends Block {
         forceDark = true;
         privileged = true;
         size = 1;
-        requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 1));
+        requirements(Category.logic, BuildVisibility.sandboxOnly, with(物品, 1));
     }
 
     @Override
@@ -43,10 +43,8 @@ public class waveRule extends Block {
             if (type == LAccess.config) {
                 wave = (int) p1;
             }
-
             super.control(type, p1, p2, p3, p4);
         }
-
         @Override
         public void updateTile() {
             if (wave <= 0) return;

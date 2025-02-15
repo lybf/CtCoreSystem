@@ -2,6 +2,7 @@ package CtCoreSystem.content;
 
 import CtCoreSystem.CoreSystem.type.yuan;
 import CtCoreSystem.content.Effect.NewFx;
+import mindustry.content.Blocks;
 import mindustry.content.UnitTypes;
 import mindustry.entities.abilities.MoveEffectAbility;
 
@@ -11,7 +12,7 @@ import static CtCoreSystem.content.Effect.NewFx.*;
 
 public class yuanban {
     public static void load() {
-        NewFx.load();
+
         UnitTypes.gamma.coreUnitDock = true;//附身脱离时不会再核心重生
         UnitTypes.alpha.coreUnitDock = true;
         UnitTypes.beta.coreUnitDock = true;

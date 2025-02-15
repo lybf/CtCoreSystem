@@ -1,16 +1,24 @@
 package CtCoreSystem.content;
 
 import CtCoreSystem.CoreSystem.type.CT3UnitType;
-import CtCoreSystem.CoreSystem.type.TDTyep.*;
+import CtCoreSystem.CoreSystem.type.TDTyep.TDBuffChange;
 import CtCoreSystem.CoreSystem.type.XVXSource;
 import CtCoreSystem.CoreSystem.type.waveRule;
 import arc.Core;
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Mathf;
+import arc.util.Eachable;
 import arc.util.Nullable;
+import arc.util.Tmp;
 import mindustry.Vars;
 import mindustry.ai.types.BuilderAI;
 import mindustry.content.Fx;
+import mindustry.core.Renderer;
 import mindustry.entities.bullet.BasicBulletType;
+import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.type.Category;
@@ -21,6 +29,7 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
+import mindustry.world.blocks.distribution.BufferedItemBridge;
 import mindustry.world.blocks.logic.LogicBlock;
 import mindustry.world.blocks.payloads.PayloadSource;
 import mindustry.world.blocks.payloads.PayloadVoid;
@@ -36,8 +45,42 @@ import static CtCoreSystem.content.ItemX.物品;
 import static mindustry.type.ItemStack.with;
 
 public class SourceCodeModification_Sandbox {
+    public static Block 隐形核心;
+
     public static void load() {
 
+
+        //敌人的隐形核心，作用于刷怪，不可被攻击和摧毁，只能用逻辑清除该方块，达到胜利的目的
+        隐形核心 = new CoreBlock("hideCore") {
+            {
+                requirements(Category.effect, BuildVisibility.editorOnly, with());
+                alwaysUnlocked = true;
+                incinerateNonBuildable = true;//不可建造，会在建造UI面板隐藏
+                isFirstTier = false;//核心地板限制
+                //unitType = 核心机0号;
+                health = 1000;
+                itemCapacity = 10000;
+                size = 1;
+                solid = false;//固体
+                targetable = false;//被单位攻击？
+                canOverdrive = false;//超速
+                unitCapModifier = 999999;
+                hasShadow = false;//方块黑影
+                drawTeamOverlay = false;//方块绘制队伍斜杠
+                buildType = Build::new;
+            }
+
+            class Build extends CoreBlock.CoreBuild {
+                @Override
+                public void damage(float damage) {
+
+                }
+
+                public void drawLight() {
+                }//不发光
+
+            }
+        };
  /*      Blocks.powerSource.envDisabled = Evn2.标志1 | Env.terrestrial;
         Blocks. powerVoid.envDisabled = Evn2.标志1 | Env.terrestrial;
         Blocks. itemSource.envDisabled = Evn2.标志1 | Env.terrestrial;
@@ -45,17 +88,50 @@ public class SourceCodeModification_Sandbox {
         Blocks.  liquidSource.envDisabled = Evn2.标志1 | Env.terrestrial;
         Blocks.    liquidVoid.envDisabled = Evn2.标志1 | Env.terrestrial;*/
 
-      new waveRule("waveRule");
+        new waveRule("waveRule");
         new TDBuffChange.Buff加盾("Shield");
         new TDBuffChange.BuffHealth("Health");
         new TDBuffChange.BuffSpee("Speed");
+        new TDBuffChange.BuffReload("Reload");
         new TDBuffChange.BuffDmage("Damage");
         new TDBuffChange.游戏速度("游戏速度");
         new TDBuffChange.游戏缩放("游戏缩放");
         new TDBuffChange.游戏环境光开关("游戏环境光开关");
         new TDBuffChange.核心禁造圈("核心禁造半径");
+        new TDBuffChange.资源清空开关("资源清空开关");
+        new TDBuffChange.敌人出生点范围("敌人出生点范围");
+        new TDBuffChange.拆除返还资源倍率("拆除返还资源倍率");
+        //地图炸档器
+        new BufferedItemBridge("breakdown") {
+            {
+                requirements(Category.effect, BuildVisibility.editorOnly, with(物品, 0));
+                health = 100;
+                itemCapacity =
+                        range = 0;
+                bufferCapacity = 0;
+                targetable =
+                        solid = false;
+                buildType = Build::new;
+
+            }
+            @Override
+            public void drawBridge(BuildPlan req, float ox, float oy, float flip) {}
+            @Override
+            public void drawPlace(int x, int y, int rotation, boolean valid) {}
+            @Override
+            public void drawPlanConfigTop(BuildPlan plan, Eachable<BuildPlan> list) {}
+            class Build extends BufferedItemBridge.BufferedItemBridgeBuild {
+                @Override
+                public void damage(float damage) {
+
+                }
+            }
+        };
+
         //沙盒全能物品源
-        new CoreBlock("ces"){{    requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 0));}} ;
+        new CoreBlock("ces") {{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 0));
+        }};
         new XVXSource("Automatic-adaptation-source") {
             {
                 this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with());
@@ -247,23 +323,6 @@ public class SourceCodeModification_Sandbox {
             }
         };
         BasicBulletType 必死子弹 = new BasicBulletType(9f, 1) {
-            @Override
-            public void hitEntity(Bullet b, Hitboxc entity, float health) {
-                super.hitEntity(b, entity, health);
-
-
-                if (entity instanceof Unit unit) {
-                    unit.remove();
-                }
-            }
-
-            @Override
-            public void hitTile(Bullet b, Building build, float x, float y, float initialHealth, boolean direct) {
-                super.hitTile(b, build, x, y, initialHealth, direct);
-
-                Tile.buildDestroyed(build);
-            }
-
             {
                 width = 9f;
                 height = 12f;
@@ -300,6 +359,7 @@ public class SourceCodeModification_Sandbox {
                             }
                         }
                     }
+
                     @Override
                     public void hitTile(Bullet b, Building build, float x, float y, float initialHealth, boolean direct) {
                         super.hitTile(b, build, x, y, initialHealth, direct);
@@ -307,9 +367,28 @@ public class SourceCodeModification_Sandbox {
                         Tile.buildDestroyed(build);
                     }
 
-                    {    absorbable = false;//子弹不被护盾仪吸收
-                        }};
+                    {
+                        absorbable = false;//子弹不被护盾仪吸收
+                    }
+                };
 
+            }
+
+            @Override
+            public void hitEntity(Bullet b, Hitboxc entity, float health) {
+                super.hitEntity(b, entity, health);
+
+
+                if (entity instanceof Unit unit) {
+                    unit.remove();
+                }
+            }
+
+            @Override
+            public void hitTile(Bullet b, Building build, float x, float y, float initialHealth, boolean direct) {
+                super.hitTile(b, build, x, y, initialHealth, direct);
+
+                Tile.buildDestroyed(build);
             }
         };
         //沙盒炮

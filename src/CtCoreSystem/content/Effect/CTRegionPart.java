@@ -6,7 +6,6 @@ import arc.graphics.g2d.TextureRegion;
 import mindustry.entities.part.RegionPart;
 
 public class CTRegionPart {
-
     public static  class 射击时显示 extends RegionPart {
         public float wScl;
         public float hScl;
@@ -30,17 +29,14 @@ public class CTRegionPart {
             colorTo = 结束颜色;//Color.valueOf("f8ca4d");//结束颜色
 
         }
-
         @Override
         public void draw(PartParams params) {
             rotation += progress.getClamp(params) * spin;
             super.draw(params);
         }
-
-        @Override
+/*        @Override
         public void load(String name) {
             super.load(name);
-
             for (TextureRegion region : regions) {
                 region.setWidth(wScl);
                 region.setHeight(hScl);
@@ -49,10 +45,6 @@ public class CTRegionPart {
                 region.setWidth(wScl);
                 region.setHeight(hScl);
             }
-        }
-
+        }*/
     }
-
-    ;
-
 }

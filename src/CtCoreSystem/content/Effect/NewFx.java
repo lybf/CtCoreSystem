@@ -24,6 +24,7 @@ import mindustry.graphics.Pal;
 import mindustry.logic.LogicFx;
 import mindustry.world.draw.DrawTurret;
 
+import static CtCoreSystem.content.Effect.CT3FxEffect.*;
 import static CtCoreSystem.content.NewColor.*;
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.lineAngle;
@@ -82,7 +83,6 @@ public class NewFx {
     }
 
     /*////////////////////////////////////*/
-    public static Effect D1, D2, D3, D4;
     public static Effect 制裁子弹消失, 灭亡子弹消失;
     public static Effect 拖尾, 拖尾圈;
 
@@ -136,61 +136,244 @@ public class NewFx {
 
             Drawf.light(e.x, e.y, 40f, Pal.lightOrange, 0.6f * e.fout());
         });
-        D1 = new Effect(60, e -> {
-            Draw.color(Color.valueOf("f9f9ca"));
-            Lines.stroke(e.fout() + 0.2f);
-            Angles.randLenVectors(e.id, 2, 1 + 20 * e.fout(), e.rotation, 120, (x, y) -> {
-                Lines.circle(e.x + x, e.y + y, 1 + e.fin() * 3);
-                Drawf.tri(e.x + x, e.y + y, e.fslope() * 3 + 1, e.fslope() * 3 + 1, Mathf.angle(x, y));
-            });
-        });
 
-        D2 = new Effect(120, e -> {//八卦阴阳鱼
-            float rad = 16f;
-            float rotation = 2 * e.fin() * 6.283f;
-
-            Drawf.circles(e.x, e.y, 32, Color.white);
-            Draw.z(90f);
-            //大圆
-            Draw.color(Color.white);
-            Fill.arc(e.x, e.y, rad * 2, 0.5f, 180 + rotation * 360 / 6.283f);
-            Draw.color(Color.black);
-            Fill.arc(e.x, e.y, rad * 2, 0.5f, rotation * 360 / 6.283f);
-
-            //中圆
-            Draw.color(Color.black);
-            Fill.circle((float) (e.x - rad * Math.cos(rotation)), (float) (e.y - rad * Math.sin(rotation)), rad);
-            Draw.color(Color.white);
-            Fill.circle((float) (e.x + rad * Math.cos(rotation)), (float) (e.y + rad * Math.sin(rotation)), rad);
-
-            //小圆
-            Draw.color(Color.black);
-            Fill.circle((float) (e.x + rad * Math.cos(rotation)), (float) (e.y + rad * Math.sin(rotation)), rad / 3f);
-            Draw.color(Color.white);
-            Fill.circle((float) (e.x - rad * Math.cos(rotation)), (float) (e.y - rad * Math.sin(rotation)), rad / 3f);
-
-        });
-        D3 = new Effect(90, 200f, e -> {
-            randLenVectors(e.id, 10, e.finpow() * 90f, (x, y) -> {
-                float size = e.fout() * 14f;
-                color(Color.lime, Color.gray, e.fin());
-                Fill.circle(e.x + x, e.y + y, size / 2f);
-            });
-        });
-
-        D4 = new Effect(13f, 300f, e -> {
-            color(Pal.lighterOrange, Color.lightGray, e.fin());
-            stroke(e.fout() * 4f + 0.2f);
-            Lines.circle(e.x, e.y, e.fin() * 200f);
-        });
 
     }
 
     public static void init() {
         //
         //世处注入特效
-        LogicFxInit.injectEffect("D1", new LogicFx.EffectEntry(NewFx.D1).color().size());
-        LogicFxInit.injectEffect("D2", new LogicFx.EffectEntry(NewFx.D2).color().size());
+        LogicFxInit.injectEffect("D1", new LogicFx.EffectEntry(D1).color().size());
+        LogicFxInit.injectEffect("D2", new LogicFx.EffectEntry(D2).color().size());
+        LogicFxInit.injectEffect("D3", new LogicFx.EffectEntry(D3).color().size());
+        LogicFxInit.injectEffect("D4", new LogicFx.EffectEntry(D4).color().size());
+        LogicFxInit.injectEffect("D5", new LogicFx.EffectEntry(D5));
+        LogicFxInit.injectEffect("D6", new LogicFx.EffectEntry(D6));
+        LogicFxInit.injectEffect("D7", new LogicFx.EffectEntry(D7));
+        LogicFxInit.injectEffect("D8", new LogicFx.EffectEntry(D8).color().size());
+        LogicFxInit.injectEffect("D9", new LogicFx.EffectEntry(D9).color().size());
+        LogicFxInit.injectEffect("D10", new LogicFx.EffectEntry(D10));
+        LogicFxInit.injectEffect("D11", new LogicFx.EffectEntry(D11).color().size());
+        LogicFxInit.injectEffect("D12", new LogicFx.EffectEntry(D12));
+        LogicFxInit.injectEffect("D12-2", new LogicFx.EffectEntry(TriangleEffect));
+       LogicFxInit.injectEffect("arcIndexer", new LogicFx.EffectEntry(arcIndexer).color().size());
+
+        LogicFxInit.injectEffect("simpleRect", new LogicFx.EffectEntry(simpleRect).color().size());
+        LogicFxInit.injectEffect("simpleCircle", new LogicFx.EffectEntry(simpleCircle).color().size());
+        LogicFxInit.injectEffect("arcQuesMarker", new LogicFx.EffectEntry(arcQuesMarker).color().size());
+        LogicFxInit.injectEffect("arcDefenseMarker", new LogicFx.EffectEntry(arcDefenseMarker).color().size());
+        LogicFxInit.injectEffect("arcAttackMarker", new LogicFx.EffectEntry(arcAttackMarker).color().size());
+        LogicFxInit.injectEffect("arcGatherMarker", new LogicFx.EffectEntry(arcGatherMarker).color().size());
+        LogicFxInit.injectEffect("arcMarker", new LogicFx.EffectEntry(arcMarker).color().size());
+        LogicFxInit.injectEffect("coreLandDust", new LogicFx.EffectEntry(coreLandDust).color().size());
+        LogicFxInit.injectEffect("shieldBreak", new LogicFx.EffectEntry(shieldBreak).color().size());
+        LogicFxInit.injectEffect("overdriveBlockFull", new LogicFx.EffectEntry(overdriveBlockFull).color().size());
+        LogicFxInit.injectEffect("lightBlock", new LogicFx.EffectEntry(lightBlock).color().size());
+        LogicFxInit.injectEffect("rotateBlock", new LogicFx.EffectEntry(rotateBlock).color().size());
+        LogicFxInit.injectEffect("healBlock", new LogicFx.EffectEntry(healBlock).color().size());
+        LogicFxInit.injectEffect("overdriveWave", new LogicFx.EffectEntry(overdriveWave).color().size());
+        LogicFxInit.injectEffect("healWaveMend", new LogicFx.EffectEntry(healWaveMend).color().size());
+        LogicFxInit.injectEffect("launchPod", new LogicFx.EffectEntry(launchPod).color().size());
+        LogicFxInit.injectEffect("launch", new LogicFx.EffectEntry(launch).color().size());
+        LogicFxInit.injectEffect("bubble", new LogicFx.EffectEntry(bubble).color().size());
+        LogicFxInit.injectEffect("ripple", new LogicFx.EffectEntry(ripple).color().size());
+        LogicFxInit.injectEffect("teleportOut", new LogicFx.EffectEntry(teleportOut).color().size());
+        LogicFxInit.injectEffect("teleport", new LogicFx.EffectEntry(teleport).color().size());
+        LogicFxInit.injectEffect("teleportActivate", new LogicFx.EffectEntry(teleportActivate).color().size());
+        LogicFxInit.injectEffect("payloadReceive", new LogicFx.EffectEntry(payloadReceive).color().size());
+        LogicFxInit.injectEffect("mineImpactWave", new LogicFx.EffectEntry(mineImpactWave).color().size());
+        LogicFxInit.injectEffect("mineImpact", new LogicFx.EffectEntry(mineImpact).color().size());
+        LogicFxInit.injectEffect("mineHuge", new LogicFx.EffectEntry(mineHuge).color().size());
+        LogicFxInit.injectEffect("mineBig", new LogicFx.EffectEntry(mineBig).color().size());
+        LogicFxInit.injectEffect("mine", new LogicFx.EffectEntry(mine).color().size());
+        LogicFxInit.injectEffect("mineSmall", new LogicFx.EffectEntry(mineSmall).color().size());
+        LogicFxInit.injectEffect("mineWallSmall", new LogicFx.EffectEntry(mineWallSmall).color().size());
+        LogicFxInit.injectEffect("generate", new LogicFx.EffectEntry(generate).color().size());
+        LogicFxInit.injectEffect("artilleryTrailSmoke", new LogicFx.EffectEntry(artilleryTrailSmoke).color().size());
+        LogicFxInit.injectEffect("conveyorPoof", new LogicFx.EffectEntry(conveyorPoof).color().size());
+        LogicFxInit.injectEffect("turbinegenerate", new LogicFx.EffectEntry(turbinegenerate).color().size());
+        LogicFxInit.injectEffect("redgeneratespark", new LogicFx.EffectEntry(redgeneratespark).color().size());
+        LogicFxInit.injectEffect("thoriumShoot", new LogicFx.EffectEntry(thoriumShoot).color().size());
+        LogicFxInit.injectEffect("lightningShoot", new LogicFx.EffectEntry(lightningShoot).color().size());
+        LogicFxInit.injectEffect("sparkShoot", new LogicFx.EffectEntry(sparkShoot).color().size());
+        LogicFxInit.injectEffect("lightningCharge", new LogicFx.EffectEntry(lightningCharge).color().size());
+        LogicFxInit.injectEffect("lancerLaserChargeBegin", new LogicFx.EffectEntry(lancerLaserChargeBegin).color().size());
+        LogicFxInit.injectEffect("lancerLaserCharge", new LogicFx.EffectEntry(lancerLaserCharge).color().size());
+        LogicFxInit.injectEffect("lancerLaserShootSmoke", new LogicFx.EffectEntry(lancerLaserShootSmoke).color().size());
+        LogicFxInit.injectEffect("lancerLaserShoot", new LogicFx.EffectEntry(lancerLaserShoot).color().size());
+        LogicFxInit.injectEffect("railHit", new LogicFx.EffectEntry(railHit).color().size());
+        LogicFxInit.injectEffect("railTrail", new LogicFx.EffectEntry(railTrail).color().size());
+        LogicFxInit.injectEffect("casing3Double", new LogicFx.EffectEntry(casing3Double).color().size());
+        LogicFxInit.injectEffect("casing2Double", new LogicFx.EffectEntry(casing2Double).color().size());
+        LogicFxInit.injectEffect("casing4", new LogicFx.EffectEntry(casing4).color().size());
+        LogicFxInit.injectEffect("casing3", new LogicFx.EffectEntry(casing3).color().size());
+        LogicFxInit.injectEffect("casing2", new LogicFx.EffectEntry(casing2).color().size());
+        LogicFxInit.injectEffect("casing1", new LogicFx.EffectEntry(casing1).color().size());
+        LogicFxInit.injectEffect("shootLiquid", new LogicFx.EffectEntry(shootLiquid).color().size());
+        LogicFxInit.injectEffect("shootPyraFlame", new LogicFx.EffectEntry(shootPyraFlame).color().size());
+        LogicFxInit.injectEffect("shootSmallFlame", new LogicFx.EffectEntry(shootSmallFlame).color().size());
+        LogicFxInit.injectEffect("shootPayloadDriver", new LogicFx.EffectEntry(shootPayloadDriver).color().size());
+        LogicFxInit.injectEffect("randLifeSpark", new LogicFx.EffectEntry(randLifeSpark).color().size());
+        LogicFxInit.injectEffect("colorSparkBig", new LogicFx.EffectEntry(colorSparkBig).color().size());
+        LogicFxInit.injectEffect("colorSpark", new LogicFx.EffectEntry(colorSpark).color().size());
+        LogicFxInit.injectEffect("circleColorSpark", new LogicFx.EffectEntry(circleColorSpark).color().size());
+        LogicFxInit.injectEffect("heatReactorSmoke", new LogicFx.EffectEntry(heatReactorSmoke).color().size());
+        LogicFxInit.injectEffect("neoplasiaSmoke", new LogicFx.EffectEntry(neoplasiaSmoke).color().size());
+        LogicFxInit.injectEffect("surgeCruciSmoke", new LogicFx.EffectEntry(surgeCruciSmoke).color().size());
+        LogicFxInit.injectEffect("regenSuppressParticle", new LogicFx.EffectEntry(regenSuppressParticle).color().size());
+        LogicFxInit.injectEffect("regenParticle", new LogicFx.EffectEntry(regenParticle).color().size());
+        LogicFxInit.injectEffect("shootSmokeMissile", new LogicFx.EffectEntry(shootSmokeMissile).color().size());
+        LogicFxInit.injectEffect("shootSmokeSquareBig", new LogicFx.EffectEntry(shootSmokeSquareBig).color().size());
+        LogicFxInit.injectEffect("shootSmokeSquareSparse", new LogicFx.EffectEntry(shootSmokeSquareSparse).color().size());
+        LogicFxInit.injectEffect("shootSmokeSquare", new LogicFx.EffectEntry(shootSmokeSquare).color().size());
+        LogicFxInit.injectEffect("shootSmokeDisperse", new LogicFx.EffectEntry(shootSmokeDisperse).color().size());
+        LogicFxInit.injectEffect("shootBigSmoke2", new LogicFx.EffectEntry(shootBigSmoke2).color().size());
+        LogicFxInit.injectEffect("shootBigSmoke", new LogicFx.EffectEntry(shootBigSmoke).color().size());
+        LogicFxInit.injectEffect("shootTitan", new LogicFx.EffectEntry(shootTitan).color().size());
+        LogicFxInit.injectEffect("shootBigColor", new LogicFx.EffectEntry(shootBigColor).color().size());
+        LogicFxInit.injectEffect("shootBig2", new LogicFx.EffectEntry(shootBig2).color().size());
+        LogicFxInit.injectEffect("shootBig", new LogicFx.EffectEntry(shootBig).color().size());
+        LogicFxInit.injectEffect("shootSmallSmoke", new LogicFx.EffectEntry(shootSmallSmoke).color().size());
+        LogicFxInit.injectEffect("shootHealYellow", new LogicFx.EffectEntry(shootHealYellow).color().size());
+        LogicFxInit.injectEffect("shootHeal", new LogicFx.EffectEntry(shootHeal).color().size());
+        LogicFxInit.injectEffect("shootSmallColor", new LogicFx.EffectEntry(shootSmallColor).color().size());
+        LogicFxInit.injectEffect("shootSmall", new LogicFx.EffectEntry(shootSmall).color().size());
+        LogicFxInit.injectEffect("smokePuff", new LogicFx.EffectEntry(smokePuff).color().size());
+        LogicFxInit.injectEffect("blockExplosionSmoke", new LogicFx.EffectEntry(blockExplosionSmoke).color().size());
+        LogicFxInit.injectEffect("reactorExplosion", new LogicFx.EffectEntry(reactorExplosion).color().size());
+        LogicFxInit.injectEffect("dynamicExplosion", new LogicFx.EffectEntry(dynamicExplosion).color().size());
+        LogicFxInit.injectEffect("explosion", new LogicFx.EffectEntry(explosion).color().size());
+        LogicFxInit.injectEffect("spawnShockwave", new LogicFx.EffectEntry(spawnShockwave).color().size());
+        LogicFxInit.injectEffect("bigShockwave", new LogicFx.EffectEntry(bigShockwave).color().size());
+        LogicFxInit.injectEffect("shockwave", new LogicFx.EffectEntry(shockwave).color().size());
+        LogicFxInit.injectEffect("overclocked", new LogicFx.EffectEntry(overclocked).color().size());
+        LogicFxInit.injectEffect("overdriven", new LogicFx.EffectEntry(overdriven).color().size());
+        LogicFxInit.injectEffect("oily", new LogicFx.EffectEntry(oily).color().size());
+        LogicFxInit.injectEffect("sporeSlowed", new LogicFx.EffectEntry(sporeSlowed).color().size());
+        LogicFxInit.injectEffect("electrified", new LogicFx.EffectEntry(electrified).color().size());
+        LogicFxInit.injectEffect("sapped", new LogicFx.EffectEntry(sapped).color().size());
+        LogicFxInit.injectEffect("muddy", new LogicFx.EffectEntry(muddy).color().size());
+        LogicFxInit.injectEffect("wet", new LogicFx.EffectEntry(wet).color().size());
+        LogicFxInit.injectEffect("freezing", new LogicFx.EffectEntry(freezing).color().size());
+        LogicFxInit.injectEffect("fireballsmoke", new LogicFx.EffectEntry(fireballsmoke).color().size());
+        LogicFxInit.injectEffect("vaporSmall", new LogicFx.EffectEntry(vaporSmall).color().size());
+        LogicFxInit.injectEffect("vapor", new LogicFx.EffectEntry(vapor).color().size());
+        LogicFxInit.injectEffect("fluxVapor", new LogicFx.EffectEntry(fluxVapor).color().size());
+        LogicFxInit.injectEffect("ventSteam", new LogicFx.EffectEntry(ventSteam).color().size());
+        LogicFxInit.injectEffect("steam", new LogicFx.EffectEntry(steam).color().size());
+        LogicFxInit.injectEffect("neoplasmHeal", new LogicFx.EffectEntry(neoplasmHeal).color().size());
+        LogicFxInit.injectEffect("fireSmoke", new LogicFx.EffectEntry(fireSmoke).color().size());
+        LogicFxInit.injectEffect("fireHit", new LogicFx.EffectEntry(fireHit).color().size());
+        LogicFxInit.injectEffect("fire", new LogicFx.EffectEntry(fire).color().size());
+        LogicFxInit.injectEffect("burning", new LogicFx.EffectEntry(burning).color().size());
+        LogicFxInit.injectEffect("flakExplosionBig", new LogicFx.EffectEntry(flakExplosionBig).color().size());
+        LogicFxInit.injectEffect("forceShrink", new LogicFx.EffectEntry(forceShrink).color().size());
+        LogicFxInit.injectEffect("absorb", new LogicFx.EffectEntry(absorb).color().size());
+        LogicFxInit.injectEffect("colorTrail", new LogicFx.EffectEntry(colorTrail).color().size());
+        LogicFxInit.injectEffect("massiveExplosion", new LogicFx.EffectEntry(massiveExplosion).color().size());
+        LogicFxInit.injectEffect("airBubble", new LogicFx.EffectEntry(airBubble));
+        LogicFxInit.injectEffect("despawn", new LogicFx.EffectEntry(despawn).color().size());
+        LogicFxInit.injectEffect("hitLaserColor", new LogicFx.EffectEntry(hitLaserColor).color().size());
+        LogicFxInit.injectEffect("hitLaser", new LogicFx.EffectEntry(hitLaser).color().size());
+        LogicFxInit.injectEffect("instHit", new LogicFx.EffectEntry(instHit).color().size());
+        LogicFxInit.injectEffect("instShoot", new LogicFx.EffectEntry(instShoot).color().size());
+        LogicFxInit.injectEffect("instBomb", new LogicFx.EffectEntry(instBomb).color().size());
+        LogicFxInit.injectEffect("hitBeam", new LogicFx.EffectEntry(hitBeam).color().size());
+        LogicFxInit.injectEffect("hitFlameBeam", new LogicFx.EffectEntry(hitFlameBeam).color().size());
+        LogicFxInit.injectEffect("hitFlamePlasma", new LogicFx.EffectEntry(hitFlamePlasma).color().size());
+        LogicFxInit.injectEffect("hitFlameSmall", new LogicFx.EffectEntry(hitFlameSmall).color().size());
+        LogicFxInit.injectEffect("hitBulletBig", new LogicFx.EffectEntry(hitBulletBig).color().size());
+        LogicFxInit.injectEffect("hitFuse", new LogicFx.EffectEntry(hitFuse).color().size());
+        LogicFxInit.injectEffect("hitSquaresColor", new LogicFx.EffectEntry(hitSquaresColor).color().size());
+        LogicFxInit.injectEffect("hitBulletColor", new LogicFx.EffectEntry(hitBulletColor).color().size());
+        LogicFxInit.injectEffect("hitBulletSmall", new LogicFx.EffectEntry(hitBulletSmall).color().size());
+        LogicFxInit.injectEffect("disperseTrail", new LogicFx.EffectEntry(disperseTrail).color().size());
+        LogicFxInit.injectEffect("shieldApply", new LogicFx.EffectEntry(shieldApply).color().size());
+        LogicFxInit.injectEffect("shieldWave", new LogicFx.EffectEntry(shieldWave).color().size());
+        LogicFxInit.injectEffect("dynamicWave", new LogicFx.EffectEntry(dynamicWave).color().size());
+        LogicFxInit.injectEffect("heal", new LogicFx.EffectEntry(heal).color().size());
+        LogicFxInit.injectEffect("healWave", new LogicFx.EffectEntry(healWave).color().size());
+        LogicFxInit.injectEffect("healWaveDynamic", new LogicFx.EffectEntry(healWaveDynamic).color().size());
+        LogicFxInit.injectEffect("greenCloud", new LogicFx.EffectEntry(greenCloud).color().size());
+        LogicFxInit.injectEffect("greenLaserChargeSmall", new LogicFx.EffectEntry(greenLaserChargeSmall).color().size());
+        LogicFxInit.injectEffect("greenLaserCharge", new LogicFx.EffectEntry(greenLaserCharge).color().size());
+        LogicFxInit.injectEffect("greenBomb", new LogicFx.EffectEntry(greenBomb).color().size());
+        LogicFxInit.injectEffect("dynamicSpikes", new LogicFx.EffectEntry(dynamicSpikes).color().size());
+        LogicFxInit.injectEffect("scatheSlash", new LogicFx.EffectEntry(scatheSlash).color().size());
+        LogicFxInit.injectEffect("scatheLight", new LogicFx.EffectEntry(scatheLight).color().size());
+        LogicFxInit.injectEffect("scatheExplosion", new LogicFx.EffectEntry(scatheExplosion).color().size());
+        LogicFxInit.injectEffect("neoplasmSplat", new LogicFx.EffectEntry(neoplasmSplat).color().size());
+        LogicFxInit.injectEffect("missileTrailSmoke", new LogicFx.EffectEntry(missileTrailSmoke).color().size());
+        LogicFxInit.injectEffect("titanSmoke", new LogicFx.EffectEntry(titanSmoke).color().size());
+        LogicFxInit.injectEffect("titanExplosion", new LogicFx.EffectEntry(titanExplosion).color().size());
+        LogicFxInit.injectEffect("sparkExplosion", new LogicFx.EffectEntry(sparkExplosion).color().size());
+        LogicFxInit.injectEffect("pickup", new LogicFx.EffectEntry(pickup).color().size());
+        LogicFxInit.injectEffect("landShock", new LogicFx.EffectEntry(landShock).color().size());
+        LogicFxInit.injectEffect("unitPickup", new LogicFx.EffectEntry(unitPickup).color().size());
+        LogicFxInit.injectEffect("unitLandSmall", new LogicFx.EffectEntry(unitLandSmall).color().size());
+        LogicFxInit.injectEffect("unitDust", new LogicFx.EffectEntry(unitDust).color().size());
+        LogicFxInit.injectEffect("unitLand", new LogicFx.EffectEntry(unitLand).color().size());
+        LogicFxInit.injectEffect("unitDrop", new LogicFx.EffectEntry(unitDrop).color().size());
+        LogicFxInit.injectEffect("breakProp", new LogicFx.EffectEntry(breakProp).color().size());
+        LogicFxInit.injectEffect("padlaunch", new LogicFx.EffectEntry(padlaunch).color().size());
+        LogicFxInit.injectEffect("unitAssemble", new LogicFx.EffectEntry(unitAssemble).color().size());
+        LogicFxInit.injectEffect("spawn2", new LogicFx.EffectEntry(spawn).color().size());
+        LogicFxInit.injectEffect("magmasmoke", new LogicFx.EffectEntry(magmasmoke).color().size());
+        LogicFxInit.injectEffect("rocketSmokeLarge", new LogicFx.EffectEntry(rocketSmokeLarge).color().size());
+        LogicFxInit.injectEffect("rocketSmoke", new LogicFx.EffectEntry(rocketSmoke).color().size());
+        LogicFxInit.injectEffect("smoke", new LogicFx.EffectEntry(smoke).color().size());
+        LogicFxInit.injectEffect("select", new LogicFx.EffectEntry(select).color().size());
+        LogicFxInit.injectEffect("breakBlock", new LogicFx.EffectEntry(breakBlock).color().size());
+        LogicFxInit.injectEffect("tapBlock", new LogicFx.EffectEntry(tapBlock).color().size());
+        LogicFxInit.injectEffect("coreLaunchConstruct", new LogicFx.EffectEntry(coreLaunchConstruct).color().size());
+        LogicFxInit.injectEffect("placeBlock", new LogicFx.EffectEntry(placeBlock).color().size());
+        LogicFxInit.injectEffect("upgradeCoreBloom", new LogicFx.EffectEntry(upgradeCoreBloom).color().size());
+        LogicFxInit.injectEffect("commandSend", new LogicFx.EffectEntry(commandSend).color().size());
+        LogicFxInit.injectEffect("attackCommand", new LogicFx.EffectEntry(attackCommand).color().size());
+        LogicFxInit.injectEffect("moveCommand", new LogicFx.EffectEntry(moveCommand).color().size());
+        LogicFxInit.injectEffect("pointShockwave", new LogicFx.EffectEntry(pointShockwave).color().size());
+        LogicFxInit.injectEffect("pointHit", new LogicFx.EffectEntry(pointHit).color().size());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 

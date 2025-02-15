@@ -78,7 +78,7 @@ Events.on(EventType.ClientLoadEvent, cons(e => {
     Vars.ui.hudGroup.fill(cons(cundang => {//存档 
         if (
             //在加载了自动存档模组后执行自动存档
-            Vars.mods.locateMod("auto-saver") == null
+            Vars.mods.locateMod("auto_saver") == null
             ) {
             //原版的存档方式
             function exportData(fi) {
@@ -107,8 +107,10 @@ Events.on(EventType.ClientLoadEvent, cons(e => {
             })).width(40).height(40).name("ores").tooltip("@data.export");
 
         } else {
+
             //自动存档方式
-            let  mod = Vars.mods.locateMod("auto-saver");
+            let  mod = Vars.mods.locateMod("auto_saver");
+            if(mod.main == null) return;
             let  dialog = Reflect.get(mod.main, "recoverDialog");
             cundang.button(Icon.upload, Styles.defaulti, run(() => {
                  dialog.show();

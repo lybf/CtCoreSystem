@@ -4,10 +4,13 @@ package CtCoreSystem;
 import CtCoreSystem.CoreSystem.DsShaders;
 import CtCoreSystem.CoreSystem.type.CTResearchDialog;
 import CtCoreSystem.CoreSystem.type.VXV.SpawnDraw;
+import CtCoreSystem.content.Effect.CT3FxEffect;
+import CtCoreSystem.content.Effect.NewFx;
 import CtCoreSystem.content.ItemX;
 import CtCoreSystem.content.SourceCodeModification_Sandbox;
 import CtCoreSystem.content.yuanban;
 import CtCoreSystem.ui.CTGalaxyAcknowledgments;
+import CtCoreSystem.ui.UnemFragment;
 import CtCoreSystem.ui.dialogs.CT3InfoDialog;
 import CtCoreSystem.ui.dialogs.CT3PlanetDialog;
 import CtCoreSystem.ui.dialogs.CT3function;
@@ -18,6 +21,7 @@ import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.ImageButton;
 import arc.struct.ObjectSet;
 import arc.struct.Seq;
+import arc.util.Log;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.game.EventType;
@@ -35,6 +39,7 @@ import mindustry.world.blocks.distribution.Sorter;
 import mindustry.world.blocks.sandbox.ItemSource;
 import mindustry.world.blocks.sandbox.LiquidSource;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import static CtCoreSystem.CoreSystem.type.VXV.TDpowerShowBlock.TDloadPowerShow;
@@ -118,6 +123,18 @@ public class CtCoreSystem extends Mod {
     }
 
     public void loadContent() {
+        //解压自动存档模组
+        if (Vars.mods.locateMod("auto_saver") == null) {
+            try {
+                Vars.mods.importMod(Vars.mods.locateMod("ctcoresystem").root.child("mod")
+                        .child("AutoSaver.jar"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        if((Vars.mods.locateMod("auto-saver")!=null) ) {
+            Vars.mods.getMod("auto-saver").state = Mods.ModState.disabled;
+        }
 
   /*
    //分类栏ui
@@ -131,6 +148,10 @@ public class CtCoreSystem extends Mod {
             ui.showException(var5);
         }
         */
+        //加载资源
+        new CT3FxEffect();
+        NewFx.load();
+        NewFx.init();
         ItemX.load();
         yuanban.load();
         DsShaders.load();//电力节点力场的动画效果
@@ -141,7 +162,6 @@ public class CtCoreSystem extends Mod {
     public void init() {
         //显示怪物路径
         SpawnDraw.init();
-
         if (Vars.mods.locateMod("extra-utilities") == null) {
             overrideVersion();//显示版本号
         }
@@ -155,16 +175,29 @@ public class CtCoreSystem extends Mod {
                 new WorldDifficultyCT2().set();
             });
         }else{  new WorldDifficulty().init();}*/
-      /*
+/*
        //动态logo
         try {
             Class arc = Class.forName("mindustry.arcModule.ARCVars");
         } catch (ClassNotFoundException e) {
-
             Vars.ui.menufrag = new UnemFragment();
             new UnemFragment().build(ui.menuGroup);
+        }*/
+        try {
+            // 尝试加载 ARCVars 类
+            Class arc = Class.forName("mindustryX.VarsX");
+            // 如果类存在，执行你的逻辑
+            Log.info("当前为mindustryX端，将禁止自动存档模组");
+            // 在这里添加你的逻辑代码
+            if((Vars.mods.locateMod("auto_saver")!=null) ) {
+                Vars.mods.getMod("auto_saver").state = Mods.ModState.disabled;
+            }
+        } catch (ClassNotFoundException e) {
+            // 如果类不存在，跳过逻辑
+           // Log.info("ARCVars 类不存在，跳过逻辑");
         }
-      */
+
+
 
         if (加载CTTD()) {
             SpawnDraw.setEnable2(true, true, true);
@@ -198,11 +231,11 @@ public class CtCoreSystem extends Mod {
         TDloadPowerShow();//塔防电力显示方块
         CT3选择方块显示图标(); //选择方块显示图标
 
-       ctUpdateDialog.load();//更新检测
+       ctUpdateDialog.load();//更新检测 新版 在用
 
 
 
-        // Timer.schedule(CTUpdater::checkUpdate, 4);//檢測更新 旧版
+        // Timer.schedule(CTUpdater::checkUpdate, 4);//檢測更新 旧版 未用
         //new Wave();   //跳波惩罚 这个被用在主篇去加载了
 
         //首页主功能按钮
