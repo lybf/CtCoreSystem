@@ -2182,11 +2182,9 @@ D5=new Effect(300f, e -> {
     }),
                 D12= new Effect(300, e -> {
         // 法阵颜色
-        Color circleColor = Color.valueOf("00aaff"); // 蓝色
-        // 符文颜色
-        Color runeColor = Color.valueOf("ff6b6b"); // 红色
+        Color circleColor = e.color;
         // 法阵半径
-        float circleRadius = 100f;
+        float circleRadius = 100f+e.rotation;
         // 符文数量
         int runeCount = 8;
         // 符文大小
@@ -2202,7 +2200,7 @@ D5=new Effect(300f, e -> {
         Lines.circle(e.x, e.y, circleRadius);
 
         // 设置符文颜色
-        Draw.color(runeColor);
+        Draw.color(e.color);
 
         // 计算旋转角度
         float rotation = e.fin() * 360f * rotationSpeed;
@@ -2229,8 +2227,6 @@ D5=new Effect(300f, e -> {
                 TriangleEffect =  new Effect(300, e -> {
                     // 线条颜色
                     Color lineColor = Color.white; // 白色
-                    // 外发光颜色
-                    Color glowColor = Color.valueOf("ff6b6b"); // 红色
                     // 三角形大小
                     float triangleSize = 100f;
                     // 圆圈半径
@@ -2241,7 +2237,7 @@ D5=new Effect(300f, e -> {
                     float innerLineWidth = 5f;
 
                     // 设置外发光颜色
-                    Draw.color(glowColor);
+                    Draw.color(e.color);
                     Lines.stroke(outerLineWidth + 2f); // 外发光线条宽度
 
                     // 绘制正三角形（向下移动半个高度）

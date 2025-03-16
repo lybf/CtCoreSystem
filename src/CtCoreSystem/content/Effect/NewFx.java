@@ -154,7 +154,7 @@ public class NewFx {
         LogicFxInit.injectEffect("D9", new LogicFx.EffectEntry(D9).color().size());
         LogicFxInit.injectEffect("D10", new LogicFx.EffectEntry(D10));
         LogicFxInit.injectEffect("D11", new LogicFx.EffectEntry(D11).color().size());
-        LogicFxInit.injectEffect("D12", new LogicFx.EffectEntry(D12));
+        LogicFxInit.injectEffect("D12", new LogicFx.EffectEntry(D12).color().size());
         LogicFxInit.injectEffect("D12-2", new LogicFx.EffectEntry(TriangleEffect));
        LogicFxInit.injectEffect("arcIndexer", new LogicFx.EffectEntry(arcIndexer).color().size());
 

@@ -1,40 +1,53 @@
 package CtCoreSystem.content;
 
+import CtCoreSystem.CoreSystem.type.BulletType.RoundBulletType;
+import CtCoreSystem.CoreSystem.type.BulletType.percentBulletType;
 import CtCoreSystem.CoreSystem.type.CT3UnitType;
+import CtCoreSystem.CoreSystem.type.LYBF.SuperForceProjectorLYBF;
+import CtCoreSystem.CoreSystem.type.Ovulam5480.液体分发器;
+import CtCoreSystem.CoreSystem.type.Ovulam5480.物资分发器;
+import CtCoreSystem.CoreSystem.type.Ovulam5480.物资提取器;
+import CtCoreSystem.CoreSystem.type.PowerNetTower;
 import CtCoreSystem.CoreSystem.type.TDTyep.TDBuffChange;
 import CtCoreSystem.CoreSystem.type.XVXSource;
 import CtCoreSystem.CoreSystem.type.waveRule;
 import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Lines;
-import arc.math.Angles;
-import arc.math.Mathf;
+import arc.scene.ui.ButtonGroup;
+import arc.scene.ui.ImageButton;
+import arc.scene.ui.ScrollPane;
+import arc.scene.ui.TextButton;
+import arc.scene.ui.layout.Table;
 import arc.util.Eachable;
-import arc.util.Nullable;
-import arc.util.Tmp;
+import arc.util.Strings;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.ai.types.BuilderAI;
 import mindustry.content.Fx;
-import mindustry.core.Renderer;
 import mindustry.entities.bullet.BasicBulletType;
+import mindustry.entities.bullet.BulletType;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.*;
+import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.type.Weapon;
 import mindustry.type.ammo.ItemAmmoType;
+import mindustry.ui.Bar;
+import mindustry.ui.Styles;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.distribution.BufferedItemBridge;
-import mindustry.world.blocks.logic.LogicBlock;
 import mindustry.world.blocks.payloads.PayloadSource;
 import mindustry.world.blocks.payloads.PayloadVoid;
+import mindustry.world.blocks.power.PowerGenerator;
 import mindustry.world.blocks.sandbox.*;
 import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.blocks.storage.StorageBlock;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import mindustry.world.meta.Stat;
@@ -42,14 +55,15 @@ import mindustry.world.meta.StatUnit;
 
 import static CtCoreSystem.CoreSystem.type.CTColor.C;
 import static CtCoreSystem.content.ItemX.物品;
+import static mindustry.type.Category.crafting;
 import static mindustry.type.ItemStack.with;
+import static mindustry.world.meta.BlockGroup.liquids;
+import static mindustry.world.meta.BlockGroup.transportation;
 
 public class SourceCodeModification_Sandbox {
     public static Block 隐形核心;
 
     public static void load() {
-
-
         //敌人的隐形核心，作用于刷怪，不可被攻击和摧毁，只能用逻辑清除该方块，达到胜利的目的
         隐形核心 = new CoreBlock("hideCore") {
             {
@@ -78,7 +92,6 @@ public class SourceCodeModification_Sandbox {
 
                 public void drawLight() {
                 }//不发光
-
             }
         };
  /*      Blocks.powerSource.envDisabled = Evn2.标志1 | Env.terrestrial;
@@ -104,7 +117,7 @@ public class SourceCodeModification_Sandbox {
         //地图炸档器
         new BufferedItemBridge("breakdown") {
             {
-                requirements(Category.effect, BuildVisibility.editorOnly, with(物品, 0));
+                requirements(Category.effect, BuildVisibility.editorOnly, with(物品, 1));
                 health = 100;
                 itemCapacity =
                         range = 0;
@@ -114,12 +127,19 @@ public class SourceCodeModification_Sandbox {
                 buildType = Build::new;
 
             }
+
             @Override
-            public void drawBridge(BuildPlan req, float ox, float oy, float flip) {}
+            public void drawBridge(BuildPlan req, float ox, float oy, float flip) {
+            }
+
             @Override
-            public void drawPlace(int x, int y, int rotation, boolean valid) {}
+            public void drawPlace(int x, int y, int rotation, boolean valid) {
+            }
+
             @Override
-            public void drawPlanConfigTop(BuildPlan plan, Eachable<BuildPlan> list) {}
+            public void drawPlanConfigTop(BuildPlan plan, Eachable<BuildPlan> list) {
+            }
+
             class Build extends BufferedItemBridge.BufferedItemBridgeBuild {
                 @Override
                 public void damage(float damage) {
@@ -127,11 +147,7 @@ public class SourceCodeModification_Sandbox {
                 }
             }
         };
-
         //沙盒全能物品源
-        new CoreBlock("ces") {{
-            requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 0));
-        }};
         new XVXSource("Automatic-adaptation-source") {
             {
                 this.requirements(Category.distribution, BuildVisibility.sandboxOnly, ItemStack.with());
@@ -142,10 +158,12 @@ public class SourceCodeModification_Sandbox {
             }
         };
         new CoreBlock("invincibleCore") {
+            float powerProduction;
+
             {
                 // localizedName = Core.bundle.get("block.core0");
                 // = Core.bundle.getOrNull("block.description.core0");
-                requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 0));
+                requirements(Category.effect, BuildVisibility.sandboxOnly, with(物品, 1));
                 alwaysUnlocked = true;//默认解锁
                 isFirstTier = true;
                 envEnabled = Env.any;
@@ -162,7 +180,7 @@ public class SourceCodeModification_Sandbox {
                         speed = 8f;
                         rotateSpeed = 15f;
                         accel = 0.1f;
-                        itemCapacity = 1000;
+                        itemCapacity = 5201314;
                         health = 100f;
                         hitSize = 16f;
                         alwaysUnlocked = true;
@@ -182,14 +200,10 @@ public class SourceCodeModification_Sandbox {
                         envDisabled = 0;
                         engineOffset = 7.5f;
                         engineSize = 3.4f;
-      /*          setEnginesMirror(
-                        new UnitEngine(35 / 4f, -13 / 4f, 2.7f, 315f),
-                        new UnitEngine(28 / 4f, -35 / 4f, 2.7f, 315f)
-                );*/
                         weapons.add(new Weapon("small-mount-weapon") {
                             {
-                                reload = 20f;
-                                bullet = new BasicBulletType(4f, 1) {
+                                reload = 5f;
+                                bullet = new BasicBulletType(20f, 1) {
                                     @Override
                                     public void hitEntity(Bullet b, Hitboxc entity, float health) {
                                         super.hitEntity(b, entity, health);
@@ -211,49 +225,10 @@ public class SourceCodeModification_Sandbox {
                                         Tile.buildDestroyed(build);
                                     }
 
-                                    /*               public void update(Bullet b){
-                                     *//*                   updateTrail(b);
-                                    updateHoming(b);
-                                    updateWeaving(b);
-                                    updateTrailEffects(b);
-                                    updateBulletInterval(b);*//*
-                                    b.remove();
-                                }*/
-                                   /* public void hitEntity(Bullet b, Hitboxc entity, float health) {
-                                        super.hitEntity(b, entity, health);
-
-
-                                        if (entity instanceof Unit unit) {
-                                            unit.remove();
-                                        }
-                                           if (entity instanceof Unit unit) {
-                                            unit.kill();
-                                        }
-                                        if (entity instanceof Unit unit) {
-                                            unit.killed();
-                                        }
-                                        if (entity instanceof Building build) {
-                                            build.kill();
-                                        }*/
-                            /*    public void hitEntity(Bullet b, Hitboxc entity, float health){
-                                  //  boolean wasDead = entity instanceof Unit u && u.dead;
-
-                                    if(entity instanceof Unit unit){
-                                        unit.remove();
-                                    }
-                                    if(entity instanceof Healthc h){
-                                        if(pierceArmor){
-                                            h.damagePierce(b.damage);
-                                        }else{
-                                            h.damage(b.damage);
-                                        }
-                                    }
-                                    handlePierce(b, health, entity.x(), entity.y());
-
-                                }*/ {
+                                    {
                                         width = 7f;
                                         height = 9f;
-                                        lifetime = 90f;
+                                        lifetime = 40f;
                                         ammoMultiplier = 1;//装弹倍率
                                         // homingPower = 1;
                                         scaleLife = true;//开启指哪打哪
@@ -262,20 +237,32 @@ public class SourceCodeModification_Sandbox {
                                         trailColor = C("baee33");
                                         absorbable = false;//子弹不被护盾仪吸收
                                     }
-                                }
-
-                                ;
-
+                                };
                             }
                         });
                     }
                 };
-                outputsPower = true;
                 health = 100;
-                itemCapacity = 900000;
+                itemCapacity = 90000000;
                 size = 3;
-                unitCapModifier = 50;
+                unitCapModifier = 10000;
+                powerProduction = 1000000000;
                 buildType = Build::new;
+                configurable = true;
+                hasPower = true;
+                consumesPower = false;
+                outputsPower = true;
+
+            }
+
+
+
+            //用于发电显示
+            @Override
+            public void setStats() {
+                super.setStats();
+                stats.remove(Stat.buildTime);
+                this.stats.add(Stat.basePowerGeneration, powerProduction, StatUnit.powerSecond);//发电
             }
 
             @Override
@@ -293,33 +280,110 @@ public class SourceCodeModification_Sandbox {
                 return Vars.state.teams.cores(tile.team()).size > 1;
             }//核心数量小于1不可拆
 
-            @Override
-            public void setStats() {
-                super.setStats();
-                stats.remove(Stat.buildTime);
-                this.stats.add(Stat.basePowerGeneration, 1000000000, StatUnit.powerSecond);//发电
-            }
 
             class Build extends CoreBuild {
-                @Override
-                public void damage(@Nullable Team source, float damage) {
-                }
-            }
-        }
+                public boolean canDamage = false;
 
-        ;
-        new LogicBlock("world-logic") {
-            {
-                requirements(Category.logic, BuildVisibility.editorOnly, with());
-                canOverdrive = false;
-                targetable = false;
-                instructionsPerTick = 8;
-                forceDark = true;
-                privileged = true;
-                size = 1;
-                maxInstructionsPerTick = 1000;
-                range = Float.MAX_VALUE;
-                envEnabled = Env.any;
+                //用于发电
+                @Override
+                public float getPowerProduction() {
+                    return powerProduction / 60f;
+                }
+
+                @Override
+                public void damage(float amount) {
+                    if (canDamage) super.damage(amount);
+                }
+
+                @Override
+                public void damage(Team source, float damage) {
+                    if (canDamage) super.damage(source, damage);
+                }
+
+                @Override
+                public void damage(float amount, boolean withEffect) {
+                    if (canDamage) super.damage(amount, withEffect);
+                }
+
+                @Override
+                public void damage(Bullet bullet, Team source, float damage) {
+                    if (canDamage) super.damage(bullet, source, damage);
+                }
+
+                @Override
+                public boolean damaged() {
+                    if (canDamage) return super.damaged();
+                    return false;
+                }
+
+                @Override
+                public void damageContinuous(float amount) {
+                    if (canDamage) super.damageContinuous(amount);
+                }
+
+                @Override
+                public void damageContinuousPierce(float amount) {
+                    if (canDamage) super.damageContinuousPierce(amount);
+                }
+
+                @Override
+                public void damagePierce(float amount) {
+                    if (canDamage) super.damagePierce(amount);
+                }
+
+                @Override
+                public void damagePierce(float amount, boolean withEffect) {
+                    if (canDamage) super.damagePierce(amount, withEffect);
+                }
+
+                @Override
+                public float handleDamage(float amount) {
+                    if (canDamage) super.handleDamage(amount);
+                    return 0f;
+                }
+
+                @Override
+                public byte version() {
+                    return 2;
+                }
+
+                @Override
+                public void read(Reads read, byte revision) {
+                    super.read(read, revision);
+                }
+
+                @Override
+                public void write(Writes write) {
+                    super.write(write);
+                }
+
+                @Override
+                public void buildConfiguration(Table table) {
+                    super.buildConfiguration(table);
+                    ButtonGroup<ImageButton> buttonGroup = new ButtonGroup<>();
+                    Table cont = new Table().top();
+                    cont.defaults().size(40);
+                    int rows = 5;
+                    for (Team team1 : Team.baseTeams) {
+                        TextButton button = cont.button(team1.coloredName(), () -> {
+                            configure(team1);
+                        }).tooltip(Core.bundle.get("switchTo", "切换到") + team1.coloredName()).group(buttonGroup).pad(4).get();
+                        button.setWidth(80);
+                        button.setColor(team1.color);
+                    }
+
+                    ScrollPane scrollPane = new ScrollPane(cont, Styles.smallPane);
+                    table.top().add(scrollPane).maxHeight(40 * rows);
+                }
+
+                @Override
+                public void configure(Object value) {
+                    super.configure(value);
+                    if (value instanceof Team team) {
+                        Vars.player.team(team);
+                        this.team(team);
+                    }
+                }
             }
         };
         BasicBulletType 必死子弹 = new BasicBulletType(9f, 1) {
@@ -377,8 +441,6 @@ public class SourceCodeModification_Sandbox {
             @Override
             public void hitEntity(Bullet b, Hitboxc entity, float health) {
                 super.hitEntity(b, entity, health);
-
-
                 if (entity instanceof Unit unit) {
                     unit.remove();
                 }
@@ -387,111 +449,101 @@ public class SourceCodeModification_Sandbox {
             @Override
             public void hitTile(Bullet b, Building build, float x, float y, float initialHealth, boolean direct) {
                 super.hitTile(b, build, x, y, initialHealth, direct);
-
                 Tile.buildDestroyed(build);
             }
         };
         //沙盒炮
-        new
+        new PowerTurret("SandboxTurret") {
+            {
+                localizedName = Core.bundle.get("Turret.SandboxTurret");
+                description = Core.bundle.getOrNull("Turret.description.SandboxTurret");
+                requirements(Category.turret, with(物品, 0));
+                targetable = false;//被单位攻击？
+                canOverdrive = false;//超速
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+                shootType = 必死子弹;
+                reload = 20f;
+                range = 70 * 8;
+                armor = 114154f;
+                shootCone = 365f;
+                ammoUseEffect = Fx.casing1;
+                health = 909130592;
+                inaccuracy = 1f; //精准
+                rotateSpeed = 30f;//炮塔旋转速度
+                buildVisibility = BuildVisibility.sandboxOnly;
+                buildType = Build::new;
+            }
 
-                PowerTurret("SandboxTurret") {
-                    {
-                        localizedName = Core.bundle.get("Turret.SandboxTurret");
-                        description = Core.bundle.getOrNull("Turret.description.SandboxTurret");
-                        requirements(Category.turret, with(物品, 0));
-                        targetable = false;//被单位攻击？
-                        canOverdrive = false;//超速
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                        shootType = 必死子弹;
-                        reload = 20f;
-                        range = 70 * 8;
-                        armor = 114154f;
-                        shootCone = 365f;
-                        ammoUseEffect = Fx.casing1;
-                        health = 909130592;
-                        inaccuracy = 1f; //精准
-                        rotateSpeed = 30f;//炮塔旋转速度
-                        buildVisibility = BuildVisibility.sandboxOnly;
-                        buildType = Build::new;
-                    }
+            class Build extends PowerTurretBuild {
+                @Override
+                public void damage(float damage) {
 
-                    class Build extends PowerTurretBuild {
-                        @Override
-                        public void damage(float damage) {
-
-                        }
-                    }
                 }
-
-        ;
-
+            }
+        };
         //短距离必死炮塔
-        new
-
-                PowerTurret("SandboxTurret2") {
-                    {
-                        localizedName = Core.bundle.get("Turret.SandboxTurret2");
-                        description = Core.bundle.getOrNull("Turret.description.SandboxTurret");
-                        requirements(Category.turret, with(物品, 0));
-                        targetable = false;//被单位攻击？
-                        canOverdrive = false;//超速
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                        shootType = new BasicBulletType(7f, 20) {
-                            public void hitEntity(Bullet b, Hitboxc entity, float health) {
-                                super.hitEntity(b, entity, health);
+        new PowerTurret("SandboxTurret2") {
+            {
+                localizedName = Core.bundle.get("Turret.SandboxTurret2");
+                description = Core.bundle.getOrNull("Turret.description.SandboxTurret");
+                requirements(Category.turret, with(物品, 0));
+                targetable = false;//被单位攻击？
+                canOverdrive = false;//超速
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+                shootType = new BasicBulletType(7f, 1) {
+                    public void hitEntity(Bullet b, Hitboxc entity, float health) {
+                        super.hitEntity(b, entity, health);
 
 
-                                if (entity instanceof Unit unit) {
-                                    unit.remove();
-                                }
-                            }
-
-                            {
-                                absorbable = false;//子弹不被护盾仪吸收
-                                width = 9f;
-                                height = 12f;
-                                reloadMultiplier = 1.3f;
-                                damage = 100;
-                                lifetime = 15f;
-                                ammoMultiplier = 1;
-                                trailColor = Color.valueOf("f1cc68");
-                                trailParam = 5;
-                                trailLength = 8;
-                                trailWidth = 5;
-                                trailInterval = 10;
-                                trailChance = 1;
-                                trailRotation = true;
-                                trailEffect = Fx.none;
-                                homingRange = 3 * 8f;//追踪范围 跟踪
-                                homingPower = 0.3f; //追踪
-                                homingDelay = 0;
-                                splashDamageRadius = 2f * 8f;
-                                splashDamage = Float.POSITIVE_INFINITY;
-
-                            }
-                        };
-                        reload = 2f;
-                        range = 10 * 8;
-                        armor = 114154f;
-                        shootCone = 365f;
-                        ammoUseEffect = Fx.casing1;
-                        health = 909130592;
-                        inaccuracy = 13f; //精准
-                        rotateSpeed = 30f;//炮塔旋转速度
-                        buildVisibility = BuildVisibility.sandboxOnly;
-                        buildType = Build::new;
+                        if (entity instanceof Unit unit) {
+                            unit.remove();
+                        }
                     }
 
-                    class Build extends PowerTurretBuild {
-                        @Override
-                        public void damage(float damage) {
+                    {
+                        absorbable = false;//子弹不被护盾仪吸收
+                        width = 9f;
+                        height = 12f;
+                        reloadMultiplier = 1.3f;
+                        lifetime = 15f;
+                        ammoMultiplier = 1;
+                        trailColor = Color.valueOf("f1cc68");
+                        trailParam = 5;
+                        trailLength = 8;
+                        trailWidth = 5;
+                        trailInterval = 10;
+                        trailChance = 1;
+                        trailRotation = true;
+                        trailEffect = Fx.none;
+                        homingRange = 3 * 8f;//追踪范围 跟踪
+                        homingPower = 0.3f; //追踪
+                        homingDelay = 0;
+                        splashDamageRadius = 2f * 8f;
+                        splashDamage = 1;
 
-                        }
                     }
                 };
+                reload = 2f;
+                range = 10 * 8;
+                armor = 114154f;
+                shootCone = 365f;
+                ammoUseEffect = Fx.casing1;
+                health = 909130592;
+                inaccuracy = 13f; //精准
+                rotateSpeed = 30f;//炮塔旋转速度
+                buildVisibility = BuildVisibility.sandboxOnly;
+                buildType = Build::new;
+            }
 
+            class Build extends PowerTurretBuild {
+                @Override
+                public void damage(float damage) {
+
+                }
+            }
+        };
         //沙盒无敌墙
         new Wall("SandboxWall") {
             {
@@ -514,111 +566,185 @@ public class SourceCodeModification_Sandbox {
 
                 }
             }
-        }
+        };
+        new PowerSource("power-source") {
+            {
+                requirements(Category.power, BuildVisibility.sandboxOnly, with(物品, 0));
+                powerProduction = 9000000f / 60f;
+                laserRange = 30;
+                maxNodes = 100;
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        };
+        new PowerVoid("power-void") {
+            {
+                requirements(Category.power, BuildVisibility.sandboxOnly, with(物品, 0));
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        };
+        new ItemSource("item-source") {
+            {
+                requirements(Category.distribution, BuildVisibility.sandboxOnly, with(物品, 0));
+                alwaysUnlocked = true;
+                itemsPerSecond = 1000;
+                envEnabled = Env.any;
+            }
+        };
+        new ItemVoid("item-void") {
+            {
+                requirements(Category.distribution, BuildVisibility.sandboxOnly, with(物品, 0));
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        }        ;
 
+        new LiquidSource("liquid-source") {
+            {
+                requirements(Category.liquid, BuildVisibility.sandboxOnly, with(物品, 0));
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        };
+        new LiquidVoid("liquid-void") {
+            {
+                requirements(Category.liquid, BuildVisibility.sandboxOnly, with(物品, 0));
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        };
+        new PayloadSource("payload-source") {
+            {
+                requirements(Category.units, BuildVisibility.sandboxOnly, with(物品, 0));
+                size = 5;
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        };
+        new PayloadVoid("payload-void") {
+            {
+                requirements(Category.units, BuildVisibility.sandboxOnly, with(物品, 0));
+                size = 5;
+                alwaysUnlocked = true;
+                envEnabled = Env.any;
+            }
+        };
+        new 物资分发器("物资分发器") {{
+            description = "";
+            consumePower(1000 / 60f);
+            size = 4;
+            range = 30;
+            group = transportation;
+            requirements(crafting, BuildVisibility.sandboxOnly, with(
+                    物品, 1
+
+            ));
+        }};
+        new 物资提取器("物资提取器") {{
+            description = "";
+            consumePower(1000 / 60f);
+            size = 4;
+            range = 40;
+            group = transportation;
+            requirements(crafting, BuildVisibility.sandboxOnly, with(
+                    物品, 1
+
+            ));
+        }};
+        new 液体分发器("液体分发器") {{
+            description = "";
+            consumePower(1000 / 60f);
+            size = 4;
+            range = 30;
+            group = liquids;
+            requirements(crafting, BuildVisibility.sandboxOnly, with(
+                    物品, 1
+
+            ));
+        }};
+        new PowerTurret("百分比炮塔最大") {{
+            description = "";
+            consumePower(1000 / 60f);
+            size = 4;
+            group = transportation;
+            requirements(crafting, BuildVisibility.sandboxOnly, with(
+                    物品, 1
+
+            ));
+            range = 50 * 8;
+            shootType = new percentBulletType.maxHealthBulletType(10) {{
+                speed = 10;
+                damage = 0;
+                lifetime = 60;
+            }};
+        }};
+        new PowerTurret("百分比炮塔当前") {{
+            description = "";
+            consumePower(1000 / 60f);
+            size = 4;
+            group = transportation;
+            requirements(crafting, BuildVisibility.sandboxOnly, with(
+                    物品, 1
+
+            ));
+            shootType = new percentBulletType.healthBulletType(10) {{
+                speed = 10;
+                damage = 1;
+                lifetime = 60;
+            }};
+            range = 50 * 8;
+        }};
+        new PowerTurret("转圈炮塔") {{
+            description = "";
+            consumePower(1000 / 60f);
+            size = 4;
+            group = transportation;
+            requirements(crafting, BuildVisibility.sandboxOnly, with(
+                    物品, 1
+
+            ));
+            shootType = new BulletType() {{
+                speed = 2;
+                damage = 0;
+                lifetime = 130;
+                fragBullets = 1;
+                fragBullet = new RoundBulletType() {{
+                    speed = 0;
+                    damage = 50;
+                    lifetime = 5 * 60;
+                }};
+
+            }};
+            range = 50 * 8;
+
+        }}
         ;
-
-
-        new
-
-                PowerSource("power-source") {
-                    {
-                        requirements(Category.power, BuildVisibility.sandboxOnly, with(物品, 0));
-                        powerProduction = 9000000f / 60f;
-                        laserRange = 30;
-                        maxNodes = 100;
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                PowerVoid("power-void") {
-                    {
-                        requirements(Category.power, BuildVisibility.sandboxOnly, with(物品, 0));
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                ItemSource("item-source") {
-                    {
-                        requirements(Category.distribution, BuildVisibility.sandboxOnly, with(物品, 0));
-                        alwaysUnlocked = true;
-                        itemsPerSecond = 1000;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                ItemVoid("item-void") {
-                    {
-                        requirements(Category.distribution, BuildVisibility.sandboxOnly, with(物品, 0));
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                LiquidSource("liquid-source") {
-                    {
-                        requirements(Category.liquid, BuildVisibility.sandboxOnly, with(物品, 0));
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                LiquidVoid("liquid-void") {
-                    {
-                        requirements(Category.liquid, BuildVisibility.sandboxOnly, with(物品, 0));
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                PayloadSource("payload-source") {
-                    {
-                        requirements(Category.units, BuildVisibility.sandboxOnly, with(物品, 0));
-                        size = 5;
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
-
-        new
-
-                PayloadVoid("payload-void") {
-                    {
-                        requirements(Category.units, BuildVisibility.sandboxOnly, with(物品, 0));
-                        size = 5;
-                        alwaysUnlocked = true;
-                        envEnabled = Env.any;
-                    }
-                }
-
-        ;
+        new StorageBlock("世界仓库") {{
+            description = "";
+            size = 2;
+            health = 200;
+            itemCapacity = 20000000;
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(物品, 1));
+            canOverdrive = false;
+            targetable = false;
+            forceDark = true;
+            privileged = true;
+        }};
+        new PowerNetTower("电力力场网") {{
+            requirements(Category.crafting, BuildVisibility.sandboxOnly, with(物品, 1));
+            size = 3;
+            range = 90;
+            consumePowerBuffered(50000000);
+        }};
+        new SuperForceProjectorLYBF("superforceprojector") {
+            {
+                requirements(Category.crafting, BuildVisibility.sandboxOnly, with(物品, 1));
+                health = 114514;
+                size = 3;
+            }
+        };
     }
+
+
 }

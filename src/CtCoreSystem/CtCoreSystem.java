@@ -3,6 +3,7 @@ package CtCoreSystem;
 
 import CtCoreSystem.CoreSystem.DsShaders;
 import CtCoreSystem.CoreSystem.type.CTResearchDialog;
+import CtCoreSystem.CoreSystem.type.Ovulam5480.xuetiao.BossBarFragment;
 import CtCoreSystem.CoreSystem.type.VXV.SpawnDraw;
 import CtCoreSystem.content.Effect.CT3FxEffect;
 import CtCoreSystem.content.Effect.NewFx;
@@ -16,6 +17,7 @@ import CtCoreSystem.ui.dialogs.CT3PlanetDialog;
 import CtCoreSystem.ui.dialogs.CT3function;
 import arc.Core;
 import arc.Events;
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.ImageButton;
@@ -24,9 +26,12 @@ import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Time;
 import mindustry.Vars;
+import mindustry.content.StatusEffects;
+import mindustry.content.UnitTypes;
 import mindustry.game.EventType;
 import mindustry.gen.Tex;
 import mindustry.graphics.Layer;
+import mindustry.graphics.Shaders;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods;
 import mindustry.type.Planet;
@@ -51,9 +56,10 @@ import static mindustry.Vars.*;
 public class CtCoreSystem extends Mod {
     public final static Seq<Runnable> BlackListRun = new Seq<>();
     public Seq<String> BaiMingDan = new Seq<>();
-
+    public static BossBarFragment bossBar;
     {
       //  Vars.state.rules.alloweditworldprocessors=false; 禁止世处编辑
+        Vars.state.rules.hideBannedBlocks=false;
         //缩放
         Vars.renderer.minZoom = 0.2F;
         Vars.renderer.maxZoom = 32;
@@ -123,7 +129,7 @@ public class CtCoreSystem extends Mod {
     }
 
     public void loadContent() {
-        //解压自动存档模组
+/*        //解压自动存档模组
         if (Vars.mods.locateMod("auto_saver") == null) {
             try {
                 Vars.mods.importMod(Vars.mods.locateMod("ctcoresystem").root.child("mod")
@@ -134,7 +140,7 @@ public class CtCoreSystem extends Mod {
         };
         if((Vars.mods.locateMod("auto-saver")!=null) ) {
             Vars.mods.getMod("auto-saver").state = Mods.ModState.disabled;
-        }
+        }*/
 
   /*
    //分类栏ui
@@ -165,6 +171,28 @@ public class CtCoreSystem extends Mod {
         if (Vars.mods.locateMod("extra-utilities") == null) {
             overrideVersion();//显示版本号
         }
+        //血条
+        bossBar = new BossBarFragment(ui.hudGroup);
+    //给状态上血条
+        bossBar.putBarMap(u->u.hasEffect(ItemX.超级Boss), Color.valueOf("fd7878"), f -> {
+            //if (f < 0.5f)return Shaders.buildBeam;  //血量一半后显示另一种特效
+            return Shaders.buildBeam;
+
+        });
+ //给单位上血条
+ /*
+    bossBar.putBarMap(u->u.type== UnitTypes.dagger, Color.valueOf("e35050"), f -> {
+            if (f < 0.5f)return Shaders.buildBeam;
+            return Shaders.water;
+
+        });
+        */
+
+
+
+
+
+
 /*       //难度调整难度：
         if(Vars.mods.locateMod("creators")!=null) {//有CT2时加载它
             Events.on(EventType.ClientLoadEvent.class, e -> {
@@ -175,14 +203,16 @@ public class CtCoreSystem extends Mod {
                 new WorldDifficultyCT2().set();
             });
         }else{  new WorldDifficulty().init();}*/
-/*
+
        //动态logo
         try {
             Class arc = Class.forName("mindustry.arcModule.ARCVars");
         } catch (ClassNotFoundException e) {
-            Vars.ui.menufrag = new UnemFragment();
-            new UnemFragment().build(ui.menuGroup);
-        }*/
+
+        }
+        Vars.ui.menufrag = new UnemFragment();
+        new UnemFragment().build(ui.menuGroup);
+/*
         try {
             // 尝试加载 ARCVars 类
             Class arc = Class.forName("mindustryX.VarsX");
@@ -196,7 +226,11 @@ public class CtCoreSystem extends Mod {
             // 如果类不存在，跳过逻辑
            // Log.info("ARCVars 类不存在，跳过逻辑");
         }
-
+*/
+        //禁用自动存档模组;
+        if((Vars.mods.locateMod("auto_saver")!=null) ) {
+            Vars.mods.getMod("auto_saver").state = Mods.ModState.disabled;
+        }
 
 
         if (加载CTTD()) {

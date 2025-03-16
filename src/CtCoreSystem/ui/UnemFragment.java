@@ -45,8 +45,8 @@ public class UnemFragment extends MenuFragment {
     private MenuRenderer renderer;
     private Seq<MenuButton> customButtons = new Seq<>();
 
-    public int frames = 89;
-    public float frames间隔 = 2.5f;
+    public int frames = 22;
+    public float frames间隔 = 10f;
 
     public void build(Group parent) {
         renderer = new MenuRenderer();
@@ -116,7 +116,7 @@ public class UnemFragment extends MenuFragment {
             TextureRegion[] logos = new TextureRegion[frames];
 
             for (int i = 0; i < frames; i++) {
-                logos[i] = Core.atlas.find("ctcoresystem" + "-Dlogo" + i);
+                logos[i] = Core.atlas.find("ctcoresystem" + "-CTlogo" + i);
             }
 
             int index = (int) ((Time.time / 100 * 60 / frames间隔) % frames);
