@@ -42,6 +42,7 @@ import mindustry.ui.dialogs.BaseDialog;
 import mindustry.ui.dialogs.PlanetDialog;
 import mindustry.ui.dialogs.ResearchDialog;
 import mindustry.ui.fragments.HudFragment;
+import mindustry.ui.fragments.PlacementFragment;
 import mindustry.world.Block;
 import mindustry.world.blocks.distribution.DirectionalUnloader;
 import mindustry.world.blocks.distribution.Sorter;
@@ -62,18 +63,19 @@ public class CtCoreSystem extends Mod {
     public Seq<String> BaiMingDan = new Seq<>();
     public static BossBarFragment bossBar;
     public CoreItemsDisplay 资源顶部显示;
-   public static   boolean cthind = settings.getBool("辅助模式");
+    public static boolean cthind = settings.getBool("辅助模式");
 
 
     {
         //  Vars.state.rules.alloweditworldprocessors=false; 禁止世处编辑
-        Vars.state.rules.hideBannedBlocks=false;
+        Vars.state.rules.hideBannedBlocks = false;
         //缩放
         Vars.renderer.minZoom = 0.2F;
         Vars.renderer.maxZoom = 32;
-//蓝图大小
+        //蓝图大小
         Vars.maxSchematicSize = 128;
     }
+
     //带桥物品显示
     public CtCoreSystem() {
         Events.on(EventType.ClientLoadEvent.class, (e) -> {
@@ -81,6 +83,7 @@ public class CtCoreSystem extends Mod {
         });
         Events.run(EventType.Trigger.draw, minerRenderer::draw);
     }
+
     //首页主功能按钮的系统
     public static ImageButton CreatorsIcon(String IconName, ImageButton.ImageButtonStyle imageButtonStyle, BaseDialog dialog) {
         TextureRegion A = Core.atlas.find("ctcoresystem-" + IconName);
@@ -92,25 +95,25 @@ public class CtCoreSystem extends Mod {
 
     public void loadContent() {
 
- if(!cthind) {
-     Vars.mods.getMod("ctcoresystem").meta.hidden = false;
+        if (!cthind) {
+            Vars.mods.getMod("ctcoresystem").meta.hidden = false;
 
- }else{
-     Vars.mods.getMod("ctcoresystem").meta.hidden = true;
- }
+        } else {
+            Vars.mods.getMod("ctcoresystem").meta.hidden = true;
+        }
         //禁用自动存档模组;
         disableModIfExists("auto_saver");
         DsShaders.load();//电力节点力场的动画效果
-      //  if(!settings.getBool("cthind")) {
-            new CT3FxEffect();
-            NewFx.load();
-            NewFx.init();
-            ItemX.load();
-            yuanban.load();
-            SourceCodeModification_Sandbox.load();
-       // }
+        //  if(!settings.getBool("cthind")) {
+        new CT3FxEffect();
+        NewFx.load();
+        NewFx.init();
+        ItemX.load();
+        yuanban.load();
+        SourceCodeModification_Sandbox.load();
+        // }
         CreatorsModJS.DawnMods();//JS加载器
-  /*
+    /*
    //分类栏ui
    new CT3ClassificationUi();
         Scripts scripts = mods.getScripts();
@@ -124,6 +127,7 @@ public class CtCoreSystem extends Mod {
         */
 
     }
+
     // 定义一个方法用于禁用指定名称的模组
     public static void disableModIfExists(String modName) {
         if (Vars.mods.locateMod(modName) != null) {
@@ -141,13 +145,11 @@ public class CtCoreSystem extends Mod {
             st.row();
             st.add(Core.bundle.format("ct3-hind")).visible(() -> 辅助开关[0]).row();
             st.image().color(Color.valueOf("69dcee")).fillX().height(3).pad(3).row();
-            st.add(Core.bundle.format("ct3-hindTXT")+"\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
+            st.add(Core.bundle.format("ct3-hindTXT") + "\n").left().growX().wrap().width(620).maxWidth(620).pad(4).labelAlign(Align.left);
         });
-       
 
 
-
-     if(!cthind) {
+        if (!cthind) {
             if (!加载CTTD()) {
             } else {
                 CTGalaxyAcknowledgments.标题页菜单();//添加标题页菜单
@@ -162,23 +164,23 @@ public class CtCoreSystem extends Mod {
             //血条
             bossBar = new BossBarFragment(ui.hudGroup);
             //给状态上血条
-            bossBar.putBarMap(u->u.hasEffect(ItemX.超级Boss), Color.valueOf("fd7878"), f -> {
+            bossBar.putBarMap(u -> u.hasEffect(ItemX.超级Boss), Color.valueOf("fd7878"), f -> {
                 //if (f < 0.5f)return Shaders.buildBeam;  //血量一半后显示另一种特效
                 return Shaders.buildBeam;
 
             });
         }
 
-     if(cthind) {
-         //写一个提示信息，表示当前已启用创世神辅助模式
-         BaseDialog dialog = new BaseDialog("警告");
-         dialog.cont.table(Tex.button, t -> {
-             t.defaults().size(280, 160).left();
-             t.add("当前已启用[accent]创世神辅助模式[]\n所有添加内容被隐藏仅保留辅助功能\n创世神系列mod可能会出现未知错误\n关闭请到设置里设置").row();
-             t.button("@close", (dialog::hide)).size(100, 64).center();//关闭按钮
-         });
-         dialog.show();
-     }
+        if (cthind) {
+            //写一个提示信息，表示当前已启用创世神辅助模式
+            BaseDialog dialog = new BaseDialog("警告");
+            dialog.cont.table(Tex.button, t -> {
+                t.defaults().size(280, 160).left();
+                t.add("当前已启用[accent]创世神辅助模式[]\n所有添加内容被隐藏仅保留辅助功能\n创世神系列mod可能会出现未知错误\n关闭请到设置里设置").row();
+                t.button("@close", (dialog::hide)).size(100, 64).center();//关闭按钮
+            });
+            dialog.show();
+        }
 
         //显示怪物路径
         SpawnDraw.init();
@@ -196,9 +198,9 @@ public class CtCoreSystem extends Mod {
         });
         */
 
-//==================
-      //动态logo加载会导致难度设置选项消失
-       //动态logo
+        //==================
+        //动态logo加载会导致难度设置选项消失
+        //动态logo
         //X端和学术端不加载动态logo
         try {
             Class.forName("mindustry.arcModule.ARCVars");
@@ -207,9 +209,9 @@ public class CtCoreSystem extends Mod {
                 Class.forName("mindustryX.VarsX");
             } catch (ClassNotFoundException b) {
                 //资源顶部显示
-                资源顶部显示= new 资源顶部显示();
+                资源顶部显示 = new 资源顶部显示();
                 ui.hudfrag.coreItems = 资源顶部显示;
-                ((Collapser)((Table)((Table)ui.hudGroup.find("coreinfo")).getChildren().get(1)).getChildren().get(0)).setTable(资源顶部显示);
+                ((Collapser) ((Table) ((Table) ui.hudGroup.find("coreinfo")).getChildren().get(1)).getChildren().get(0)).setTable(资源顶部显示);
                 if (Vars.mobile) ui.settings.graphics.checkPref("coreitems", true);
 
                 //动态logo
@@ -220,9 +222,7 @@ public class CtCoreSystem extends Mod {
         }
 
 
-//==================
-
-
+        //==================
 
 
         //敌人行进路线
@@ -246,8 +246,7 @@ public class CtCoreSystem extends Mod {
         Vars.ui.planet = new CT3PlanetDialog();
         CT3InfoDialog.show();//开屏显示
         CT3选择方块显示图标(); //选择方块显示图标
-       ctUpdateDialog.load();//更新检测 新版 在用
-
+        ctUpdateDialog.load();//更新检测 新版 在用
 
 
         // Timer.schedule(CTUpdater::checkUpdate, 4);//檢測更新 旧版 未用
@@ -273,9 +272,26 @@ public class CtCoreSystem extends Mod {
             Time.runTask(1.0F, research::hide);
         });
 
+        //替换
+        replaceUI();
+    }
 
-        //PlacementFragment blockfrag = new CTPlacementFragment();
-       // Vars.ui.hudfrag.blockfrag=new CTPlacementFragment();
+    /**
+     * replace ui
+     */
+    private void replaceUI() {
+        if (!mobile) {//pc端替换PlacementFragmentUI
+            //覆盖原版选择
+            CTPlacementFragment placementFragment = new CTPlacementFragment();
+            placementFragment.build(ui.hudGroup);
+            try {
+                ui.hudfrag.blockfrag = placementFragment;
+            } catch (Exception ignore) {
+            }
+
+
+        }
+
         //覆盖原版难度选择
         try {
             Field field = PlanetDialog.class.getDeclaredField("campaignRules");
@@ -285,6 +301,7 @@ public class CtCoreSystem extends Mod {
             throw new RuntimeException(e);
         }
     }
+
     //选择方块显示图标
     public void CT3选择方块显示图标() {
         Events.run(EventType.Trigger.draw, () -> {
@@ -339,6 +356,7 @@ public class CtCoreSystem extends Mod {
     public static boolean 加载CT2() {
         return Vars.mods.locateMod("creators") != null;
     }
+
     public static void overrideVersion() {
         for (int i = 0; i < Vars.mods.list().size; i++) {
             Mods.LoadedMod mod = Vars.mods.list().get(i);
@@ -359,7 +377,7 @@ public class CtCoreSystem extends Mod {
                     continue;
                 }
                 boolean yes = true;
-                for (String  name : names) {
+                for (String name : names) {
                     if (Objects.equals(b.minfo.mod.meta.name, name) || Objects.equals(b.minfo.mod.name, name)) {
                         yes = false;
                         break;
